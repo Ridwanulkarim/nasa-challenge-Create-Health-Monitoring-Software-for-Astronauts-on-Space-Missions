@@ -5,6 +5,8 @@
   "scripts": {
     "start": "node backend/server.js",
     "dev": "node backend/server.js",
+    "dev:react": "npm --prefix frontend-react run dev",
+    "build:react": "npm --prefix frontend-react run build",
     "seed": "node database/seed.js",
     "test:auth": "node backend/test-auth.js",
     "test:rules": "node backend/test-rule-engine.js",
