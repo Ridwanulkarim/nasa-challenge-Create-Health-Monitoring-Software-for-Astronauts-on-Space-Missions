@@ -185,12 +185,13 @@ async function acknowledgeAlert(alertId) {
 }
 window.acknowledgeAlert = acknowledgeAlert;
 
-async function loadCountermeasures() {
+async function loadCountermeasures(fresh = true) {
   const container = document.getElementById('countermeasures-list');
   if (!container) return;
 
   try {
-    const res = await window.api.get('/countermeasures/active');
+    const endpoint = fresh ? '/countermeasures/active?fresh=true' : '/countermeasures/active';
+    const res = await window.api.get(endpoint);
     if (res && res.success && res.protocols) {
       renderCountermeasures(res);
     }
@@ -204,7 +205,23 @@ function renderCountermeasures(data) {
   const progressBar = document.getElementById('cm-progress-bar');
   const progressText = document.getElementById('cm-progress-text');
   const complianceBadge = document.getElementById('cm-compliance-badge');
+  const resetBtn = document.getElementById('btn-reset-cm');
   if (!container) return;
+
+  // Bind Reset button if available
+  if (resetBtn && !resetBtn.dataset.bound) {
+    resetBtn.dataset.bound = 'true';
+    resetBtn.addEventListener('click', async () => {
+      resetBtn.disabled = true;
+      resetBtn.textContent = '...';
+      try {
+        await window.api.post('/countermeasures/reset', {});
+      } catch (e) {}
+      await loadCountermeasures(true);
+      resetBtn.disabled = false;
+      resetBtn.textContent = '↻ Reset';
+    });
+  }
 
   if (complianceBadge) {
     complianceBadge.textContent = `Adherence: ${data.complianceScore}%`;
@@ -235,9 +252,9 @@ function renderCountermeasures(data) {
       </div>
       <div>
         ${p.completed ? `
-          <span class="mono" style="font-size: 11px; color: var(--status-normal-text); font-weight: 700; display: inline-flex; align-items: center; gap: 4px; padding: 6px 10px; background: rgba(0, 230, 118, 0.1); border: 1px solid rgba(0, 230, 118, 0.3); border-radius: 4px;">
+          <button type="button" class="btn-verified-cm" data-id="${p.id}" style="font-size: 11px; color: var(--status-normal-text); font-weight: 700; display: inline-flex; align-items: center; gap: 4px; padding: 6px 10px; background: rgba(0, 230, 118, 0.1); border: 1px solid rgba(0, 230, 118, 0.3); border-radius: 4px; cursor: pointer;" title="Click to reset and log again">
             ✓ VERIFIED ONBOARD
-          </span>
+          </button>
         ` : `
           <button type="button" class="btn-primary btn-log-cm" data-id="${p.id}" data-title="${p.title}" data-category="${p.category}" data-duration="${p.durationMinutes}" style="padding: 6px 14px; font-size: 11px;">
             LOG COMPLETED
@@ -266,11 +283,25 @@ function renderCountermeasures(data) {
           category,
           duration_minutes: duration
         });
-        loadCountermeasures();
+        loadCountermeasures(false);
       } catch (err) {
         alert('Failed to log protocol completion: ' + err.message);
         btn.disabled = false;
         btn.textContent = 'LOG COMPLETED';
+      }
+    });
+  });
+
+  // Attach click listeners to "✓ VERIFIED ONBOARD" buttons to allow unlogging/resetting
+  container.querySelectorAll('.btn-verified-cm').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      btn.textContent = 'Resetting...';
+      try {
+        await window.api.post('/countermeasures/reset', {});
+        await loadCountermeasures(true);
+      } catch (err) {
+        await loadCountermeasures(true);
       }
     });
   });

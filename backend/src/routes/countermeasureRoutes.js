@@ -19,5 +19,6 @@ router.use((req, res, next) => {
 
 router.get('/active', countermeasureController.getActiveCountermeasures);
 router.post('/log', countermeasureController.logCountermeasureCompletion);
+router.post('/reset', countermeasureController.resetCountermeasures);
 
 module.exports = router;

@@ -52,16 +52,23 @@ async function getActiveCountermeasures(req, res) {
       // fallback
     }
 
-    // 2. Fetch today's completed logs
+    // 2. Fetch today's completed logs (unless fresh/reload requested)
     let completedProtocolIds = new Set();
-    try {
-      const [logs] = await pool.query(
-        `SELECT protocol_id FROM countermeasure_logs WHERE astronaut_id = ? AND DATE(completed_at) = CURDATE();`,
-        [astronautId]
-      );
-      logs.forEach(l => completedProtocolIds.add(l.protocol_id));
-    } catch (e) {
-      // fallback
+    const isReloadOrFresh = req.query.fresh === 'true' || req.query.reload === 'true';
+    if (isReloadOrFresh) {
+      try {
+        await pool.query(`DELETE FROM countermeasure_logs WHERE astronaut_id = ?;`, [astronautId]);
+      } catch (e) {}
+    } else {
+      try {
+        const [logs] = await pool.query(
+          `SELECT protocol_id FROM countermeasure_logs WHERE astronaut_id = ? AND DATE(completed_at) = CURDATE();`,
+          [astronautId]
+        );
+        logs.forEach(l => completedProtocolIds.add(l.protocol_id));
+      } catch (e) {
+        // fallback
+      }
     }
 
     const overallStatus = latestRecord ? latestRecord.overall_status : 'NORMAL';
@@ -191,7 +198,24 @@ async function logCountermeasureCompletion(req, res) {
   }
 }
 
+async function resetCountermeasures(req, res) {
+  try {
+    const astronautId = req.user ? req.user.astronautId : 'AST-001';
+    await pool.query(
+      `DELETE FROM countermeasure_logs WHERE astronaut_id = ?;`,
+      [astronautId]
+    );
+    res.status(200).json({
+      success: true,
+      message: 'Countermeasure protocols reset successfully. Ready for logging.'
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+}
+
 module.exports = {
   getActiveCountermeasures,
-  logCountermeasureCompletion
+  logCountermeasureCompletion,
+  resetCountermeasures
 };

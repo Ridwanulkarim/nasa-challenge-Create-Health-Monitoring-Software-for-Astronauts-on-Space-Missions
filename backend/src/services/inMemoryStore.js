@@ -288,17 +288,6 @@ function initializeTelemetry() {
       read_at: null,
       created_at: new Date(Date.now() - 3600000 * 1).toISOString()
     });
-
-    // Seed sample countermeasure logs
-    COUNTERMEASURE_LOGS.push({
-      id: 1,
-      astronaut_id: 'AST-001',
-      protocol_id: 'CM-ARED-01',
-      protocol_title: 'ARED High-Resistance Leg Press & Deadlifts',
-      category: 'EXERCISE_RESISTIVE',
-      duration_minutes: 45,
-      completed_at: new Date().toISOString()
-    });
   }
 }
 
@@ -421,6 +410,13 @@ async function query(sql, params = []) {
       completed_at: new Date().toISOString()
     });
     return [{ affectedRows: 1, insertId: COUNTERMEASURE_LOGS.length }];
+  }
+
+  // 8b. DELETE COUNTERMEASURE LOGS
+  if (upper.startsWith('DELETE FROM COUNTERMEASURE_LOGS')) {
+    const astroId = params[0] || 'AST-001';
+    COUNTERMEASURE_LOGS = COUNTERMEASURE_LOGS.filter(l => l.astronaut_id !== astroId);
+    return [{ affectedRows: 1 }];
   }
 
   // 9. SELECT ASTRONAUTS / PROFILE
