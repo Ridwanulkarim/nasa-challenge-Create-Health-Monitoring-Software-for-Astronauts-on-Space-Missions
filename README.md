@@ -310,7 +310,7 @@ The unified server will start on: **`http://localhost:3000`** (serving the compi
 ### Step 7 (Optional): Fast Vite Development Mode
 For instant Hot Module Replacement (HMR) during frontend development:
 ```bash
-npm run client:dev
+npm run dev
 ```
 *Runs Vite dev server at `http://localhost:5173` with automated API proxying to `http://localhost:3000`.*
 
@@ -322,7 +322,25 @@ Log in using your astronaut name / call sign (e.g. `sajid`, `Alex Vance`), selec
 
 ---
 
-## 11. Verification & Automated Test Suites
+## 11. Deploying to Vercel (1-Click Cloud Deployment)
+
+AstroHealth is pre-configured for seamless deployment on **Vercel** with fullstack support (React 18 frontend + Serverless Express API):
+
+1. **Repository:** Ensure your repository is on GitHub: [nasa-challenge-Create-Health-Monitoring-Software-for-Astronauts-on-Space-Missions](https://github.com/Ridwanulkarim/nasa-challenge-Create-Health-Monitoring-Software-for-Astronauts-on-Space-Missions).
+2. Go to **[vercel.com](https://vercel.com)** and click **"Add New Project"**.
+3. Select and import your GitHub repository.
+4. Vercel automatically detects the pre-configured `vercel.json`:
+   - **Framework Preset:** Other / Vite
+   - **Build Command:** `npm run build`
+   - **Output Directory:** `frontend/dist`
+5. *(Optional for Cloud Database)*: Under **Environment Variables**, add:
+   - `DATABASE_URL` or `MYSQL_URL` (from Aiven, PlanetScale, Supabase, or TiDB).
+   - `DEMO_MODE=true` (enables onboard simulation mode).
+6. Click **Deploy**! Your application will be live with continuous deployments on every `git push`.
+
+---
+
+## 12. Verification & Automated Test Suites
 
 Run the built-in diagnostic test suites:
 
