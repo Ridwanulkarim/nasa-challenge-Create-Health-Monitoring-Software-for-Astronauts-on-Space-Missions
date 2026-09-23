@@ -155,12 +155,16 @@ async function openDrilldown(astronautId) {
       alertsHtml = '<div style="margin-top: 16px;"><h4 style="font-size: 12px; color: var(--status-critical-text); text-transform: uppercase; font-family: var(--font-mono); margin-bottom: 8px;">Active Operational Alerts</h4>';
       activeAlerts.forEach(a => {
         alertsHtml += `
-          <div style="background: rgba(255, 23, 68, 0.08); border-left: 3px solid var(--status-critical-border); padding: 10px 14px; border-radius: var(--radius-sm); margin-bottom: 6px; font-size: 12px;">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
-              <strong style="color: var(--text-highlight);">${a.reason}</strong>
-              <span class="mono" style="color: var(--accent-cyan); font-size: 11px;">${a.indicator_name}: ${a.current_value}</span>
+          <div class="alert-card-item CRITICAL" style="padding: 10px 14px 10px 16px; margin-bottom: 8px;">
+            <div class="alert-card-main">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; gap: 8px; flex-wrap: wrap;">
+                <strong style="color: var(--text-highlight); font-size: 12.5px;">${a.reason}</strong>
+                <span class="alert-telemetry-tag" style="font-size: 10px; padding: 1px 6px;">${a.indicator_name || a.indicator_id}: ${a.current_value}</span>
+              </div>
+              <div style="color: var(--text-muted); font-size: 11.5px; line-height: 1.4;">
+                <strong style="color: var(--accent-cyan); font-family: var(--font-mono); font-size: 10px;">PROTOCOL:</strong> ${a.recommended_action}
+              </div>
             </div>
-            <div style="color: var(--text-muted); font-size: 11.5px;">Protocol: ${a.recommended_action}</div>
           </div>
         `;
       });

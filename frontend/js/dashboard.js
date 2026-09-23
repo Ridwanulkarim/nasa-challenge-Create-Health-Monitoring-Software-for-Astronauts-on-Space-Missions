@@ -95,33 +95,43 @@ function renderDashboard(record) {
     alertsContainer.innerHTML = '';
     activeAlerts.forEach(alt => {
       const alertDiv = document.createElement('div');
-      alertDiv.style.cssText = `
-        background: ${alt.severity === 'CRITICAL' ? 'var(--status-critical-bg)' : 'var(--status-warning-bg)'};
-        border: 1px solid ${alt.severity === 'CRITICAL' ? 'var(--status-critical-border)' : 'var(--status-warning-border)'};
-        padding: 12px 16px;
-        border-radius: var(--radius-sm);
-        margin-bottom: 8px;
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 14px;
-      `;
+      alertDiv.className = `alert-card-item ${alt.severity}`;
+      alertDiv.style.cssText = 'padding: 13px 18px; margin-bottom: 10px;';
+
+      const formattedTime = new Date(alt.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
       alertDiv.innerHTML = `
-        <div>
-          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 3px;">
-            <span class="status-badge ${alt.severity}">${alt.severity}</span>
-            <span class="mono" style="font-weight: 700; color: var(--text-highlight);">${alt.current_value}</span>
-            <span style="font-size: 10.5px; color: var(--text-dim); font-family: var(--font-mono);">${new Date(alt.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+        <div class="alert-card-main">
+          <div class="alert-card-header">
+            <span class="status-badge ${alt.severity}">
+              <span class="comms-dot" style="background: currentColor; width: 6px; height: 6px;"></span>
+              ${alt.severity}
+            </span>
+            <span class="mono alert-id-badge">${alt.alert_id}</span>
+            <span class="alert-telemetry-tag">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              ${alt.indicator_name || alt.indicator_id}: <strong>${alt.current_value}</strong>
+            </span>
+            <span class="mono alert-timestamp">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              ${formattedTime}
+            </span>
           </div>
-          <p style="font-size: 12.5px; color: var(--text-highlight); font-weight: 600;">${alt.reason}</p>
-          <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
-            <strong>Protocol Directive:</strong> ${alt.recommended_action}
-          </p>
+          <h4 class="alert-card-title" style="font-size: 13.5px; margin-bottom: 6px;">${alt.reason}</h4>
+          <div class="alert-protocol-box" style="margin-top: 6px; padding: 8px 12px;">
+            <div class="alert-protocol-label">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Protocol Directive:
+            </div>
+            <p class="alert-protocol-text" style="font-size: 11.5px;">${alt.recommended_action}</p>
+          </div>
         </div>
-        <button onclick="acknowledgeAlert('${alt.alert_id}')" class="btn-primary" style="padding: 5px 12px; font-size: 10.5px; white-space: nowrap;">
-          Acknowledge
-        </button>
+        <div class="alert-card-actions">
+          <button onclick="acknowledgeAlert('${alt.alert_id}')" class="btn-ack-alert" style="padding: 6px 12px; font-size: 10.5px;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Acknowledge
+          </button>
+        </div>
       `;
       alertsContainer.appendChild(alertDiv);
     });

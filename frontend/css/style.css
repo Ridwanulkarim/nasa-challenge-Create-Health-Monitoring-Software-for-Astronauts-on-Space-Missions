@@ -810,14 +810,228 @@ a:hover {
 }
 
 .disclaimer-banner {
+  position: relative;
+  overflow: hidden;
   background: rgba(10, 16, 31, 0.65);
   border: 1px solid var(--border-subtle);
-  border-left: 3px solid var(--accent-cyan);
-  padding: 10px 14px;
+  padding: 10px 14px 10px 18px;
   border-radius: var(--radius-sm);
   font-size: 11px;
   color: var(--text-dim);
   line-height: 1.5;
+}
+
+.disclaimer-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 3.5px;
+  background: var(--accent-cyan);
+}
+
+/* ==========================================================================
+   Aerospace-Grade Mission Telemetry Alert Cards
+   ========================================================================== */
+
+.alert-card-item {
+  position: relative;
+  background: rgba(13, 22, 41, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 16px 20px 16px 22px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  overflow: hidden;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+
+/* Precision left indicator strip - flush and clipped to container radius */
+.alert-card-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--border-medium);
+  transition: background 0.2s ease;
+}
+
+.alert-card-item:hover {
+  border-color: rgba(0, 240, 255, 0.35);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+}
+
+/* Severity: CRITICAL */
+.alert-card-item.CRITICAL {
+  border-color: rgba(255, 23, 68, 0.28);
+  background: linear-gradient(135deg, rgba(255, 23, 68, 0.04) 0%, rgba(13, 22, 41, 0.82) 100%);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35), 0 0 1px rgba(255, 23, 68, 0.35);
+}
+
+.alert-card-item.CRITICAL::before {
+  background: #ff1744;
+  box-shadow: 0 0 10px rgba(255, 23, 68, 0.7);
+}
+
+/* Severity: WARNING */
+.alert-card-item.WARNING {
+  border-color: rgba(255, 171, 0, 0.26);
+  background: linear-gradient(135deg, rgba(255, 171, 0, 0.03) 0%, rgba(13, 22, 41, 0.82) 100%);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35), 0 0 1px rgba(255, 171, 0, 0.35);
+}
+
+.alert-card-item.WARNING::before {
+  background: #ffab00;
+  box-shadow: 0 0 10px rgba(255, 171, 0, 0.7);
+}
+
+/* State: IS-READ / ACKNOWLEDGED */
+.alert-card-item.is-read {
+  opacity: 0.62;
+  border-color: var(--border-subtle);
+  background: rgba(10, 16, 31, 0.6);
+  box-shadow: none;
+}
+
+.alert-card-item.is-read::before {
+  background: var(--text-dim);
+  box-shadow: none;
+}
+
+/* Alert Card Internal Elements */
+.alert-card-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.alert-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.alert-card-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--text-highlight);
+  letter-spacing: 0.01em;
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+}
+
+.alert-telemetry-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--accent-cyan);
+  background: rgba(0, 240, 255, 0.08);
+  border: 1px solid rgba(0, 240, 255, 0.22);
+  border-radius: 3px;
+  padding: 2px 7px;
+  font-weight: 600;
+}
+
+.alert-id-badge {
+  font-size: 10.5px;
+  color: var(--text-dim);
+  letter-spacing: 0.04em;
+}
+
+.alert-timestamp {
+  font-size: 10.5px;
+  color: var(--text-dim);
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.alert-protocol-box {
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  margin-top: 10px;
+}
+
+.alert-protocol-label {
+  font-size: 9.5px;
+  text-transform: uppercase;
+  color: var(--accent-cyan);
+  font-weight: 800;
+  font-family: var(--font-mono);
+  letter-spacing: 0.08em;
+  margin-bottom: 3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.alert-protocol-text {
+  font-size: 12px;
+  color: var(--text-main);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.alert-card-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.btn-ack-alert {
+  background: rgba(0, 240, 255, 0.08);
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  color: var(--accent-cyan);
+  padding: 7px 14px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.btn-ack-alert:hover {
+  background: rgba(0, 240, 255, 0.2);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.35);
+  color: #fff;
+}
+
+.alert-ack-badge {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--status-normal-text);
+  padding: 4px 10px;
+  background: rgba(0, 230, 118, 0.08);
+  border: 1px solid rgba(0, 230, 118, 0.3);
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
 }
 
 .auth-wrapper {

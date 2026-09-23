@@ -281,10 +281,13 @@ function showEvaluationModal(evalData) {
     alertsList.innerHTML = '';
     alerts.forEach(a => {
       const div = document.createElement('div');
-      div.style.cssText = 'background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); margin-bottom: 6px; font-size: 11.5px;';
+      div.className = `alert-card-item ${a.severity || 'WARNING'}`;
+      div.style.cssText = 'padding: 8px 12px 8px 14px; margin-bottom: 6px; font-size: 11.5px;';
       div.innerHTML = `
-        <span class="status-badge ${a.severity}" style="font-size: 9px; padding: 1px 5px;">${a.severity}</span>
-        <strong style="color: var(--text-highlight); margin-left: 6px;">${a.reason}</strong>
+        <div class="alert-card-main" style="display: flex; align-items: center; gap: 8px;">
+          <span class="status-badge ${a.severity}" style="font-size: 9.5px; padding: 2px 6px;">${a.severity}</span>
+          <strong style="color: var(--text-highlight);">${a.reason}</strong>
+        </div>
       `;
       alertsList.appendChild(div);
     });

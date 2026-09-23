@@ -22,10 +22,12 @@
       background: linear-gradient(90deg, #ef4444, #ffab00, #ef4444);
     }
     .qrh-card {
+      position: relative;
+      overflow: hidden;
       border: 1px solid var(--border-subtle);
       background: rgba(13, 22, 41, 0.85);
       border-radius: var(--radius-sm);
-      padding: 16px 18px;
+      padding: 16px 18px 16px 20px;
       margin-bottom: 16px;
       transition: all 0.2s ease;
     }
@@ -34,7 +36,17 @@
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     }
     .qrh-card.critical-qrh {
-      border-left: 4px solid #ef4444;
+      border-color: rgba(239, 68, 68, 0.35);
+    }
+    .qrh-card.critical-qrh::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 4px;
+      background: #ef4444;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
     }
     .qrh-step-item {
       display: flex;
