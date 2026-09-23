@@ -52,10 +52,10 @@ app.use(cors());
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Serve frontend static assets: prioritize React SPA (client/dist) if built, fallback to frontend/
-const clientDistPath = path.join(__dirname, '../client/dist');
-const legacyFrontendPath = path.join(__dirname, '../frontend');
-const staticPath = fs.existsSync(path.join(clientDistPath, 'index.html')) ? clientDistPath : legacyFrontendPath;
+// Serve frontend static assets: prioritize React SPA (frontend/dist) if built, fallback to frontend/
+const frontendDistPath = path.join(__dirname, '../frontend/dist');
+const frontendRawPath = path.join(__dirname, '../frontend');
+const staticPath = fs.existsSync(path.join(frontendDistPath, 'index.html')) ? frontendDistPath : frontendRawPath;
 app.use(express.static(staticPath));
 
 // System Health Probe Endpoint
