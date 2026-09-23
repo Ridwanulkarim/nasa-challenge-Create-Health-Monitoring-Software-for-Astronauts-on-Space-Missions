@@ -70,20 +70,10 @@
       flex-direction: column;
       justify-content: space-between;
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
     }
-    .astronaut-fleet-card::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-    }
-    .astronaut-fleet-card.CRITICAL::before { background: var(--status-critical-border); box-shadow: var(--status-critical-glow); }
-    .astronaut-fleet-card.WARNING::before { background: var(--status-warning-border); box-shadow: var(--status-warning-glow); }
-    .astronaut-fleet-card.NORMAL::before { background: var(--status-normal-border); box-shadow: var(--status-normal-glow); }
+    .astronaut-fleet-card.CRITICAL { border-color: rgba(255, 23, 68, 0.4); }
+    .astronaut-fleet-card.WARNING { border-color: rgba(255, 171, 0, 0.4); }
+    .astronaut-fleet-card.NORMAL { border-color: var(--border-subtle); }
 
     .astronaut-fleet-card:hover {
       transform: translateY(-2px);

@@ -636,27 +636,10 @@ a:hover {
   overflow: hidden;
 }
 
-.metric-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 3px;
-  height: 100%;
-  background: var(--accent-cyan);
-  opacity: 0.3;
-  transition: opacity 0.2s ease, width 0.2s ease;
-}
-
 .metric-card:hover {
   transform: translateY(-2px);
   border-color: var(--border-medium);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-}
-
-.metric-card:hover::before {
-  opacity: 1;
-  width: 4px;
 }
 
 .metric-header {
@@ -810,102 +793,57 @@ a:hover {
 }
 
 .disclaimer-banner {
-  position: relative;
-  overflow: hidden;
   background: rgba(10, 16, 31, 0.65);
   border: 1px solid var(--border-subtle);
-  padding: 10px 14px 10px 18px;
+  padding: 12px 16px;
   border-radius: var(--radius-sm);
   font-size: 11px;
   color: var(--text-dim);
   line-height: 1.5;
 }
 
-.disclaimer-banner::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 3.5px;
-  background: var(--accent-cyan);
-}
-
 /* ==========================================================================
-   Aerospace-Grade Mission Telemetry Alert Cards
+   Clean Mission Telemetry Alert Cards (No side stripes or asymmetrical borders)
    ========================================================================== */
 
 .alert-card-item {
-  position: relative;
-  background: rgba(13, 22, 41, 0.75);
+  background: var(--bg-surface);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-sm);
-  padding: 16px 20px 16px 22px;
-  margin-bottom: 12px;
+  border-radius: var(--radius-md);
+  padding: 18px 22px;
+  margin-bottom: 14px;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 20px;
-  overflow: hidden;
-  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
-}
-
-/* Precision left indicator strip - flush and clipped to container radius */
-.alert-card-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 4px;
-  background: var(--border-medium);
-  transition: background 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
 }
 
 .alert-card-item:hover {
-  border-color: rgba(0, 240, 255, 0.35);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+  border-color: var(--border-medium);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
 }
 
 /* Severity: CRITICAL */
 .alert-card-item.CRITICAL {
-  border-color: rgba(255, 23, 68, 0.28);
-  background: linear-gradient(135deg, rgba(255, 23, 68, 0.04) 0%, rgba(13, 22, 41, 0.82) 100%);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35), 0 0 1px rgba(255, 23, 68, 0.35);
-}
-
-.alert-card-item.CRITICAL::before {
-  background: #ff1744;
-  box-shadow: 0 0 10px rgba(255, 23, 68, 0.7);
+  border: 1px solid rgba(255, 23, 68, 0.35);
+  background: var(--bg-surface);
 }
 
 /* Severity: WARNING */
 .alert-card-item.WARNING {
-  border-color: rgba(255, 171, 0, 0.26);
-  background: linear-gradient(135deg, rgba(255, 171, 0, 0.03) 0%, rgba(13, 22, 41, 0.82) 100%);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35), 0 0 1px rgba(255, 171, 0, 0.35);
-}
-
-.alert-card-item.WARNING::before {
-  background: #ffab00;
-  box-shadow: 0 0 10px rgba(255, 171, 0, 0.7);
+  border: 1px solid rgba(255, 171, 0, 0.35);
+  background: var(--bg-surface);
 }
 
 /* State: IS-READ / ACKNOWLEDGED */
 .alert-card-item.is-read {
-  opacity: 0.62;
-  border-color: var(--border-subtle);
-  background: rgba(10, 16, 31, 0.6);
-  box-shadow: none;
-}
-
-.alert-card-item.is-read::before {
-  background: var(--text-dim);
-  box-shadow: none;
+  opacity: 0.6;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-card);
 }
 
 /* Alert Card Internal Elements */
