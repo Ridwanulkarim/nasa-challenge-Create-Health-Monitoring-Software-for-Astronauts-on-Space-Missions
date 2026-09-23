@@ -8,6 +8,7 @@
 
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const helmet = require('helmet');
 const cors = require('cors');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
@@ -36,7 +37,8 @@ app.use(helmet({
     directives: {
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'", "'unsafe-inline'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com"],
       imgSrc: ["'self'", "data:"],
       connectSrc: ["'self'"]
     }
@@ -50,9 +52,11 @@ app.use(cors());
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Serve frontend static assets (Single Server / Single Port Architecture)
-const frontendPath = path.join(__dirname, '../frontend');
-app.use(express.static(frontendPath));
+// Serve frontend static assets: prioritize React SPA (client/dist) if built, fallback to frontend/
+const clientDistPath = path.join(__dirname, '../client/dist');
+const legacyFrontendPath = path.join(__dirname, '../frontend');
+const staticPath = fs.existsSync(path.join(clientDistPath, 'index.html')) ? clientDistPath : legacyFrontendPath;
+app.use(express.static(staticPath));
 
 // System Health Probe Endpoint
 app.get('/api/health-check', (req, res) => {
@@ -85,8 +89,8 @@ app.get('*', (req, res, next) => {
       error: `API route not found: ${req.method} ${req.originalUrl}`
     });
   }
-  // Serve frontend index.html for non-API routes if frontend exists
-  const indexPath = path.join(frontendPath, 'index.html');
+  // Serve static index.html for non-API routes (SPA routing)
+  const indexPath = path.join(staticPath, 'index.html');
   res.sendFile(indexPath, (err) => {
     if (err) {
       // If frontend index.html not yet created, return status JSON
