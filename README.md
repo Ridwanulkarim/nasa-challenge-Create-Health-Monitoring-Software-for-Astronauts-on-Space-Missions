@@ -2,7 +2,8 @@
 ### NASA Space Apps Challenge 2026
 
 > **Challenge:** *"Create Health Monitoring Software for Astronauts on Space Missions"*  
-> **Mission Objective:** Build an onboard health monitoring and decision-support prototype for long-duration human spaceflight (e.g. Artemis lunar bases and Mars transit).
+> **Mission Objective:** Build an onboard health monitoring and decision-support prototype for long-duration human spaceflight (e.g. Artemis lunar bases and Mars transit).  
+> **Subjects / Themes:** `Human Exploration` &bull; `Software` &bull; `Space Exploration`
 
 ---
 
@@ -16,6 +17,11 @@ During long-duration deep space exploration, astronauts travel far beyond low Ea
 * **Detect multi-day cumulative trends** (such as consecutive sleep deficits or progressive vital deviations).
 * **Receive immediate, deterministic decision-support alerts** with transparent rationales and mission-oriented protocol directives without needing real-time Earth connectivity.
 * **Allow authorized Mission Control personnel** to monitor fleet health and review historical telemetry dossiers through a ground interface.
+
+### NASA Subject Alignment:
+* 🧑‍🚀 **Human Exploration:** Directly tackles human physical and mental health challenges during long-duration deep-space missions. Grounded in the **NASA Human Research Program (HRP)** 5 hazards, individualized 14-day biological baselines, daily physical countermeasures (ARED / T2 / Chibis LBNP), behavioral wellness tracking, and microgravity emergency medical protocols (QRH).
+* 💻 **Software:** Robust full-stack software architecture featuring a **React 18 + Vite** SPA, Node.js Express REST API, MySQL relational database, and an offline, deterministic **Rule Evaluation Engine** (multi-parameter evaluation, trend detection, and threshold directives with zero cloud hallucinations).
+* 🚀 **Space Exploration:** Tailored for deep-space exploration constraints beyond Low Earth Orbit (Artemis Lunar Base & Mars transit), featuring **communication latency simulation** (up to 12-minute delays and blackouts), deep-space **radiation dosimeter accumulation** tracking against career limits, and checksum-verified **JSON relay packets** for burst transmission to ground flight surgeons.
 
 > [!IMPORTANT]
 > **DECISION-SUPPORT ONLY — NOT A DIAGNOSTIC TOOL:**  
