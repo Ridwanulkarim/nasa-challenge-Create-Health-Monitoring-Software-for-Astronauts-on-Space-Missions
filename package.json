@@ -4,10 +4,7 @@
   "description": "Onboard Astronaut Health Monitoring and Decision-Support System - NASA Space Apps Challenge 2026",
   "scripts": {
     "start": "node backend/server.js",
-    "dev": "npm --prefix frontend run dev",
-    "frontend:dev": "npm --prefix frontend run dev",
-    "frontend:build": "npm --prefix frontend run build",
-    "build": "npm --prefix frontend install && npm --prefix frontend run build",
+    "dev": "node backend/server.js",
     "seed": "node database/seed.js",
     "test:auth": "node backend/test-auth.js",
     "test:rules": "node backend/test-rule-engine.js",

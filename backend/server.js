@@ -52,10 +52,8 @@ app.use(cors());
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Serve frontend static assets: prioritize React SPA (frontend/dist) if built, fallback to frontend/
-const frontendDistPath = path.join(__dirname, '../frontend/dist');
-const frontendRawPath = path.join(__dirname, '../frontend');
-const staticPath = fs.existsSync(path.join(frontendDistPath, 'index.html')) ? frontendDistPath : frontendRawPath;
+// Serve frontend static assets directly from frontend/
+const staticPath = path.join(__dirname, '../frontend');
 app.use(express.static(staticPath));
 
 // System Health Probe Endpoint
@@ -81,7 +79,7 @@ app.use('/api/wearables', wearableRoutes);
 app.use('/api/countermeasures', countermeasureRoutes);
 app.get('/api/dossier/:astronautId?', dossierController.getClinicalDossier);
 
-// Fallback route for Single Page Application navigation
+// Fallback route: supports both direct .html files, clean URLs, and index.html
 app.get('*', (req, res, next) => {
   if (req.originalUrl.startsWith('/api/')) {
     return res.status(404).json({
@@ -89,17 +87,23 @@ app.get('*', (req, res, next) => {
       error: `API route not found: ${req.method} ${req.originalUrl}`
     });
   }
-  // Serve static index.html for non-API routes (SPA routing)
+
+  // Check if a corresponding .html file exists (e.g. /dashboard -> /dashboard.html)
+  const cleanPath = req.path.replace(/^\//, '');
+  const htmlFile = path.join(staticPath, cleanPath.endsWith('.html') ? cleanPath : `${cleanPath}.html`);
+  if (cleanPath && fs.existsSync(htmlFile)) {
+    return res.sendFile(htmlFile);
+  }
+
+  // Otherwise serve index.html
   const indexPath = path.join(staticPath, 'index.html');
-  res.sendFile(indexPath, (err) => {
-    if (err) {
-      // If frontend index.html not yet created, return status JSON
-      res.status(200).json({
-        message: 'Spacecraft Onboard Telemetry Server is running.',
-        apiDoc: '/api/health-check',
-        auth: '/api/auth/login'
-      });
-    }
+  if (fs.existsSync(indexPath)) {
+    return res.sendFile(indexPath);
+  }
+
+  res.status(200).json({
+    message: 'Spacecraft Onboard Telemetry Server is running.',
+    apiDoc: '/api/health-check'
   });
 });
 

@@ -20,7 +20,7 @@ During long-duration deep space exploration, astronauts travel far beyond low Ea
 
 ### NASA Subject Alignment:
 * 🧑‍🚀 **Human Exploration:** Directly tackles human physical and mental health challenges during long-duration deep-space missions. Grounded in the **NASA Human Research Program (HRP)** 5 hazards, individualized 14-day biological baselines, daily physical countermeasures (ARED / T2 / Chibis LBNP), behavioral wellness tracking, and microgravity emergency medical protocols (QRH).
-* 💻 **Software:** Robust full-stack software architecture featuring a **React 18 + Vite** SPA, Node.js Express REST API, MySQL relational database, and an offline, deterministic **Rule Evaluation Engine** (multi-parameter evaluation, trend detection, and threshold directives with zero cloud hallucinations).
+* 💻 **Software:** Robust full-stack software architecture featuring a native **HTML5, CSS3 & JavaScript** bio-HUD, Node.js Express REST API, MySQL relational database, and an offline, deterministic **Rule Evaluation Engine** (multi-parameter evaluation, trend detection, and threshold directives with zero cloud hallucinations).
 * 🚀 **Space Exploration:** Tailored for deep-space exploration constraints beyond Low Earth Orbit (Artemis Lunar Base & Mars transit), featuring **communication latency simulation** (up to 12-minute delays and blackouts), deep-space **radiation dosimeter accumulation** tracking against career limits, and checksum-verified **JSON relay packets** for burst transmission to ground flight surgeons.
 
 > [!IMPORTANT]
@@ -36,11 +36,10 @@ During long-duration deep space exploration, astronauts travel far beyond low Ea
 |                            SPACECRAFT ONBOARD NETWORK                             |
 |                                                                                   |
 |   +---------------------------------------------------------------------------+   |
-|   |                 PRESENTATION LAYER (React 18 + Vite SPA)                  |   |
-|   |  - React 18 Single Page Application with Vite 6 build pipeline (`client/`)|   |
-|   |  - React Router v6 for zero-flicker deep-space client navigation          |   |
-|   |  - AuthContext hook (`useAuth`) with JWT token storage & session handling  |   |
-|   |  - React-Chartjs-2 for dynamic 14-day clinical baseline trends & radiation|   |
+|   |                 PRESENTATION LAYER (HTML5, CSS3 & Modern JS)              |   |
+|   |  - Native modular web architecture with zero bundler overhead (`frontend/`)|   |
+|   |  - Direct multi-page layout (Dashboard, Check-in, Dossier, Alerts, QRH)   |   |
+|   |  - High-performance Chart.js for dynamic 14-day clinical baseline trends  |   |
 |   |  - Wearable IoT BLE Ingestion (WHOOP 4.0 & Fitbit Sense simulation)       |   |
 |   |  - Hands-Free Web Speech API Voice Dictation with natural biometric parser|   |
 |   |  - Cinematic NASA Space-to-Mars gradient & glassmorphic telemetry cards   |   |
@@ -311,37 +310,27 @@ npm start
 # Or from backend:
 node server.js
 ```
-The unified server will start on: **`http://localhost:3000`** (serving the compiled React SPA).
+The unified server will start on: **`http://localhost:3000`** (serving the complete frontend and API).
 
-### Step 7 (Optional): Fast Vite Development Mode
-For instant Hot Module Replacement (HMR) during frontend development:
-```bash
-npm run dev
-```
-*Runs Vite dev server at `http://localhost:5173` with automated API proxying to `http://localhost:3000`.*
-
-### Step 8: Access the Application
+### Step 7: Access the Application
 Open your browser and navigate to:
 **`http://localhost:3000`**
 
-Log in using your astronaut name / call sign (e.g. `sajid`, `Alex Vance`), select your mission role (e.g., `Astronaut`, `Mission Commander`), and enter the simulation passcode (`password`).
+Log in using your astronaut name / call sign (e.g. `Sajid`, `Alex Vance`), select your mission role (e.g., `Mission Commander`), and enter the simulation passcode (`AstroPass2026!`).
 
 ---
 
 ## 11. Deploying to Vercel (1-Click Cloud Deployment)
 
-AstroHealth is pre-configured for seamless deployment on **Vercel** with fullstack support (React 18 frontend + Serverless Express API):
+AstroHealth is pre-configured for seamless deployment on **Vercel** with fullstack support (Modular Frontend + Serverless Express API):
 
 1. **Repository:** Ensure your repository is on GitHub: [nasa-challenge-Create-Health-Monitoring-Software-for-Astronauts-on-Space-Missions](https://github.com/Ridwanulkarim/nasa-challenge-Create-Health-Monitoring-Software-for-Astronauts-on-Space-Missions).
 2. Go to **[vercel.com](https://vercel.com)** and click **"Add New Project"**.
 3. Select and import your GitHub repository.
-4. Vercel automatically detects the pre-configured `vercel.json`:
-   - **Framework Preset:** Other / Vite
-   - **Build Command:** `npm run build`
-   - **Output Directory:** `frontend/dist`
+4. Vercel automatically detects the pre-configured `vercel.json` rewrites and serverless function in `api/index.js`.
 5. *(Optional for Cloud Database)*: Under **Environment Variables**, add:
    - `DATABASE_URL` or `MYSQL_URL` (from Aiven, PlanetScale, Supabase, or TiDB).
-   - `DEMO_MODE=true` (enables onboard simulation mode).
+   - `DEMO_MODE=true` (enables autonomous onboard simulation mode).
 6. Click **Deploy**! Your application will be live with continuous deployments on every `git push`.
 
 ---

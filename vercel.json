@@ -1,28 +1,16 @@
 {
-  "services": {
-    "frontend": {
-      "root": "frontend",
-      "framework": "vite"
-    },
-    "backend": {
-      "root": "backend",
-      "entrypoint": "server.js"
-    }
-  },
   "rewrites": [
-    {
-      "source": "/api(/.*)?",
-      "destination": {
-        "type": "service",
-        "service": "backend"
-      }
-    },
-    {
-      "source": "/(.*)",
-      "destination": {
-        "type": "service",
-        "service": "frontend"
-      }
-    }
+    { "source": "/api/(.*)", "destination": "/api/index.js" },
+    { "source": "/dashboard", "destination": "/frontend/dashboard.html" },
+    { "source": "/health-check", "destination": "/frontend/health-check.html" },
+    { "source": "/history", "destination": "/frontend/history.html" },
+    { "source": "/alerts", "destination": "/frontend/alerts.html" },
+    { "source": "/dossier", "destination": "/frontend/dossier.html" },
+    { "source": "/emergency", "destination": "/frontend/emergency.html" },
+    { "source": "/profile", "destination": "/frontend/profile.html" },
+    { "source": "/research", "destination": "/frontend/research.html" },
+    { "source": "/mission-control", "destination": "/frontend/mission-control.html" },
+    { "source": "/", "destination": "/frontend/index.html" },
+    { "source": "/(.*)", "destination": "/frontend/$1" }
   ]
 }
