@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AstroHealth — Telemetry Alerts & Protocols</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .filter-btn-group {
+      display: inline-flex;
+      background: rgba(10, 16, 31, 0.7);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 3px;
+      gap: 4px;
+    }
+    .btn-filter {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 4px;
+      font-size: 11px;
+      cursor: pointer;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      transition: all 0.15s ease;
+    }
+    .btn-filter:hover {
+      color: var(--text-highlight);
+      border-color: var(--border-subtle);
+    }
+    .btn-filter.active {
+      background: var(--accent-cyan-dim);
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+    }
+    .alert-card-item {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 18px 22px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+    @media (max-width: 768px) {
+      .alert-card-item {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        padding: 14px 16px;
+      }
+    }
+    .alert-card-item.CRITICAL {
+      border-left: 5px solid var(--status-critical-border);
+      background: linear-gradient(90deg, rgba(255, 23, 68, 0.08) 0%, rgba(13, 22, 41, 0.78) 100%);
+    }
+    .alert-card-item.WARNING {
+      border-left: 5px solid var(--status-warning-border);
+      background: linear-gradient(90deg, rgba(255, 171, 0, 0.08) 0%, rgba(13, 22, 41, 0.78) 100%);
+    }
+    .alert-card-item.is-read {
+      opacity: 0.6;
+      background: var(--bg-card);
+      border-left-color: var(--border-medium);
+    }
+    .alert-card-item:hover {
+      border-color: var(--border-medium);
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="app-shell">
+    <main class="app-main">
+      <div class="page-content">
+
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="mono" style="font-size: 11px; color: var(--accent-cyan); letter-spacing: 0.1em; text-transform: uppercase;">
+                DECISION SUPPORT // ONBOARD INCIDENT LOG
+              </span>
+            </div>
+            <h1 style="font-size: 24px; font-weight: 800; letter-spacing: -0.01em; margin-top: 2px;">
+              Onboard Telemetry Alerts
+            </h1>
+            <p style="color: var(--text-muted); font-size: 12.5px; margin-top: 2px;">
+              Autonomous rule violations, critical threshold breaches, and actionable flight crew guidance.
+            </p>
+          </div>
+
+          <div class="filter-btn-group">
+            <button class="btn-filter active" data-status="all">ALL INCIDENTS</button>
+            <button class="btn-filter" data-status="unread">ACTIVE UNREAD</button>
+          </div>
+        </div>
+
+        <div id="alerts-list">
+          <p style="color: var(--text-muted); padding: 24px; text-align: center;">
+            Querying spacecraft alert telemetry registry...
+          </p>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth-guard.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/alerts.js"></script>
+</body>
+</html>

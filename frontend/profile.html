@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AstroHealth — Astronaut Personal Profile</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div id="app-shell">
+    <main class="app-main">
+      <div class="page-content" style="max-width: 960px; margin: 0 auto;">
+
+        <!-- Header -->
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-bottom: 20px;">
+          <div>
+            <div style="font-size: 10px; color: var(--accent-cyan); font-weight: 800; letter-spacing: 0.12em; font-family: var(--font-mono); text-transform: uppercase;">
+              CREW FLIGHT CREDENTIALS &bull; MEDICAL DOSSIER
+            </div>
+            <h1 style="font-size: 22px; font-weight: 800; letter-spacing: -0.01em; margin-top: 2px;">
+              ASTRONAUT PERSONAL PROFILE
+            </h1>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <a href="dashboard.html" class="btn-secondary" style="font-size: 11.5px; padding: 7px 14px; text-decoration: none;">
+              &larr; Back to Dashboard
+            </a>
+          </div>
+        </div>
+
+        <!-- Success Toast -->
+        <div id="profile-success-toast" style="display: none; background: rgba(0, 230, 118, 0.12); border: 1px solid var(--status-normal-border); border-radius: var(--radius-sm); padding: 10px 14px; font-size: 12px; color: var(--status-normal-text); font-family: var(--font-mono); margin-bottom: 16px;">
+          ✓ Profile preferences saved successfully.
+        </div>
+
+        <!-- Crew Hero Identity Card -->
+        <div class="card" style="margin-bottom: 20px; border-color: rgba(0, 240, 255, 0.35); background: linear-gradient(135deg, rgba(13, 22, 41, 0.95) 0%, rgba(9, 14, 28, 0.95) 100%);">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+            <div style="display: flex; align-items: center; gap: 18px;">
+              <div style="width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(13, 22, 41, 0.9)); border: 2px solid var(--accent-cyan); display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 800; color: var(--accent-cyan); font-family: var(--font-mono); box-shadow: 0 0 16px rgba(0, 240, 255, 0.25);">
+                <span id="prof-avatar">--</span>
+              </div>
+              <div>
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                  <h2 id="prof-full-name" style="font-size: 18px; font-weight: 800; color: var(--text-highlight);">
+                    Loading...
+                  </h2>
+                  <span id="prof-callsign-badge" class="mono" style="font-size: 10.5px; background: rgba(0, 240, 255, 0.12); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); padding: 2px 8px; border-radius: 4px;">
+                    CALLSIGN: --
+                  </span>
+                </div>
+                <div id="prof-role-title" style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">
+                  --
+                </div>
+                <div style="font-size: 11px; color: var(--text-dim); margin-top: 4px; font-family: var(--font-mono);">
+                  ID: <span id="prof-astronaut-id" style="color: var(--accent-cyan);">--</span> &bull; 
+                  Mission: <span id="prof-mission-name" style="color: var(--text-highlight);">ARTEMIS III</span> &bull; 
+                  Spacecraft: <span id="prof-spacecraft" style="color: var(--text-highlight);">Orion CSM</span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <span class="status-badge NORMAL" style="font-size: 10.5px; padding: 4px 10px; display: inline-flex; align-items: center; gap: 6px;">
+                <span>✓</span> CLASS 1 SPACE MEDICAL CLEARANCE
+              </span>
+              <div style="font-size: 10.5px; color: var(--text-dim); font-family: var(--font-mono); margin-top: 6px; text-align: right;">
+                Assigned Surgeon: Dr. Sarah Chen, MD (JSC)
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3-Column Bio & Mission Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 16px; margin-bottom: 20px;">
+          
+          <!-- Personal Baseline Biometrics -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <svg class="hud-icon" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg> Personal 14-Day Baselines
+              </div>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; font-family: var(--font-mono);">
+              <div style="display: flex; justify-content: space-between; padding-bottom: 6px; border-bottom: 1px solid var(--border-subtle);">
+                <span style="color: var(--text-muted);">Resting Heart Rate:</span>
+                <strong style="color: var(--text-highlight);">72 BPM</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding-bottom: 6px; border-bottom: 1px solid var(--border-subtle);">
+                <span style="color: var(--text-muted);">Blood Oxygen (SpO₂):</span>
+                <strong style="color: var(--accent-cyan);">98.0%</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding-bottom: 6px; border-bottom: 1px solid var(--border-subtle);">
+                <span style="color: var(--text-muted);">Blood Pressure:</span>
+                <strong style="color: var(--text-highlight);">118 / 76 mmHg</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding-bottom: 6px; border-bottom: 1px solid var(--border-subtle);">
+                <span style="color: var(--text-muted);">Core Temperature:</span>
+                <strong style="color: var(--text-highlight);">36.8°C</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding-bottom: 6px; border-bottom: 1px solid var(--border-subtle);">
+                <span style="color: var(--text-muted);">Body Mass:</span>
+                <strong style="color: var(--text-highlight);">75.0 kg</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-muted);">Daily Fluid Recovery:</span>
+                <strong style="color: var(--status-normal-text);">2.8 L / day</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Connected Biosensors -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <span>📡</span> Paired Biosensors &amp; IoT
+              </div>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 8px 12px; display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                  <div style="font-size: 12px; font-weight: 700; color: var(--text-highlight);">WHOOP 4.0 Bio-Strap</div>
+                  <div style="font-size: 10px; color: var(--text-dim); font-family: var(--font-mono);">BLE 5.3 Mesh &bull; 100 Hz PPG</div>
+                </div>
+                <span class="mono" style="font-size: 10.5px; color: var(--status-normal-text); font-weight: 700;">93% Battery</span>
+              </div>
+
+              <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 8px 12px; display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                  <div style="font-size: 12px; font-weight: 700; color: var(--text-highlight);">Fitbit Sense Bio-Tracker</div>
+                  <div style="font-size: 10px; color: var(--text-dim); font-family: var(--font-mono);">cEDA Stress &bull; Skin Temp</div>
+                </div>
+                <span class="mono" style="font-size: 10.5px; color: var(--status-normal-text); font-weight: 700;">87% Battery</span>
+              </div>
+
+              <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 8px 12px; display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                  <div style="font-size: 12px; font-weight: 700; color: var(--text-highlight);">EPD-702 Active Dosimeter</div>
+                  <div style="font-size: 10px; color: var(--text-dim); font-family: var(--font-mono);">Real-Time Silicon Diode</div>
+                </div>
+                <span class="mono" style="font-size: 10.5px; color: #ffab00; font-weight: 700;">Calibrated</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Emergency Medical Factors -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <svg class="hud-icon" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 22 22 7 12 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> Emergency Clinical Data
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; font-family: var(--font-mono);">
+              <div style="display: flex; justify-content: space-between; padding-bottom: 6px; border-bottom: 1px solid var(--border-subtle);">
+                <span style="color: var(--text-muted);">Blood Group:</span>
+                <strong style="color: #ef4444;">O-Positive (O+)</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding-bottom: 6px; border-bottom: 1px solid var(--border-subtle);">
+                <span style="color: var(--text-muted);">Drug Allergies:</span>
+                <strong style="color: var(--status-normal-text);">NKDA (None)</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding-bottom: 6px; border-bottom: 1px solid var(--border-subtle);">
+                <span style="color: var(--text-muted);">Cumulative Dose:</span>
+                <strong style="color: #ffab00;">5.62 mSv</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding-bottom: 6px; border-bottom: 1px solid var(--border-subtle);">
+                <span style="color: var(--text-muted);">Career Limit Margin:</span>
+                <strong style="color: var(--status-normal-text);">44.38 mSv remaining</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-muted);">Countermeasures:</span>
+                <strong style="color: var(--status-normal-text);">92% Adherence</strong>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Edit Profile Form -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <svg class="hud-icon" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit Flight Profile &amp; Countermeasure Preferences
+            </div>
+          </div>
+
+          <form id="edit-profile-form">
+            <div class="form-group">
+              <label class="form-label" for="edit_full_name">Astronaut Name / Call Sign</label>
+              <input type="text" id="edit_full_name" class="form-input" required placeholder="e.g. Alex Vance, Tanvir Ahmed, or your name">
+            </div>
+
+            <div class="grid-2" style="margin-top: 10px;">
+              <div class="form-group">
+                <label class="form-label" for="edit_role_title">Role / Rank Title</label>
+                <input type="text" id="edit_role_title" class="form-input" required placeholder="e.g. Astronaut, Mission Commander">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="edit_exercise_target">Daily Countermeasure Target (hrs)</label>
+                <input type="number" id="edit_exercise_target" class="form-input" min="1.0" max="6.0" step="0.5" value="2.0">
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 10px;">
+              <label class="form-label" for="edit_notes">Personal Mission Health &amp; Sleep Notes</label>
+              <textarea id="edit_notes" class="form-textarea" rows="3" placeholder="Enter personal sleep preferences, circadian lighting adjustments, or dietary notes..."></textarea>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; margin-top: 16px;">
+              <button type="submit" id="btn-save-profile" class="btn-primary" style="padding: 9px 22px;">
+                SAVE PROFILE PREFERENCES
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth-guard.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/profile.js"></script>
+</body>
+</html>

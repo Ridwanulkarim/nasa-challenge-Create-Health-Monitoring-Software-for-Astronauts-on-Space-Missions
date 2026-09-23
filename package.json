@@ -1,0 +1,21 @@
+{
+  "name": "astronaut-health-monitor",
+  "version": "1.0.0",
+  "description": "Onboard Astronaut Health Monitoring and Decision-Support System - NASA Space Apps Challenge 2026",
+  "scripts": {
+    "start": "node backend/server.js",
+    "seed": "node database/seed.js",
+    "test:auth": "node backend/test-auth.js",
+    "test:rules": "node backend/test-rule-engine.js",
+    "test:api": "node backend/test-step4-api.js"
+  },
+  "keywords": [
+    "nasa",
+    "space-apps-challenge-2026",
+    "astronaut-health",
+    "telemetry",
+    "decision-support"
+  ],
+  "author": "NASA Space Apps Challenge 2026 Team",
+  "license": "MIT"
+}

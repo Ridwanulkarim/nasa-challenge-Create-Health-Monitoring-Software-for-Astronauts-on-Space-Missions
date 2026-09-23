@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AstroHealth — Space Medicine Emergency QRH</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .emergency-hero {
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      background: linear-gradient(135deg, rgba(38, 12, 18, 0.95) 0%, rgba(13, 22, 41, 0.95) 100%);
+      border-radius: var(--radius-md);
+      padding: 18px 22px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .emergency-hero::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, #ef4444, #ffab00, #ef4444);
+    }
+    .qrh-card {
+      border: 1px solid var(--border-subtle);
+      background: rgba(13, 22, 41, 0.85);
+      border-radius: var(--radius-sm);
+      padding: 16px 18px;
+      margin-bottom: 16px;
+      transition: all 0.2s ease;
+    }
+    .qrh-card:hover {
+      border-color: rgba(0, 240, 255, 0.35);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+    .qrh-card.critical-qrh {
+      border-left: 4px solid #ef4444;
+    }
+    .qrh-step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 12px;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-sm);
+      margin-bottom: 8px;
+      transition: all 0.15s ease;
+    }
+    .qrh-step-item:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .qrh-step-item.completed {
+      background: rgba(0, 230, 118, 0.08);
+      border-color: rgba(0, 230, 118, 0.3);
+    }
+    .qrh-step-checkbox {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent-cyan);
+      cursor: pointer;
+      margin-top: 2px;
+    }
+    .search-bar-box {
+      display: flex;
+      align-items: center;
+      background: rgba(9, 14, 28, 0.9);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 8px 14px;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .search-bar-box:focus-within {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.2);
+    }
+    .search-bar-input {
+      background: transparent;
+      border: none;
+      color: var(--text-highlight);
+      font-size: 13px;
+      font-family: var(--font-mono);
+      width: 100%;
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="app-shell">
+    <main class="app-main">
+      <div class="page-content">
+
+        <!-- Emergency QRH Header Banner -->
+        <div class="emergency-hero">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+            <div style="display: flex; align-items: center; gap: 14px;">
+              <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; display: flex; align-items: center; justify-content: center;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 22 22 7 12 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              </div>
+              <div>
+                <div style="font-size: 10px; color: #ef4444; font-weight: 800; letter-spacing: 0.15em; font-family: var(--font-mono); text-transform: uppercase;">
+                  NASA HRP AUTONOMOUS SPACEFLIGHT PROTOCOL &bull; QUICK REFERENCE HANDBOOK
+                </div>
+                <h1 style="font-size: 20px; font-weight: 800; color: #ffffff; letter-spacing: -0.01em; margin-top: 2px;">
+                  ONBOARD EMERGENCY SPACE MEDICINE GUIDE (QRH)
+                </h1>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
+                  Standardized step-by-step clinical decision procedures for crew autonomy during Earth communication delays.
+                </p>
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <button type="button" id="btn-sound-alarm" class="btn-secondary" style="border-color: rgba(239, 68, 68, 0.5); color: #ef4444; font-size: 11px; padding: 7px 14px; display: inline-flex; align-items: center; gap: 6px;">
+                <svg class="hud-icon" style="color: #ef4444; margin-right: 4px;" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg> TEST AUDIO ALARM CHIME
+              </button>
+              <button type="button" id="btn-reset-qrh" class="btn-secondary" style="font-size: 11px; padding: 7px 14px;">
+                RESET ALL CHECKLISTS
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Filter & Search Bar -->
+        <div class="search-bar-box">
+          <svg class="hud-icon" style="color: var(--accent-cyan); margin-right: 4px;" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="emergency-search-input" class="search-bar-input" placeholder="Search emergency protocol by keyword (e.g., SANS, vision, motion sickness, radiation, hypoxia, decompression)...">
+          <span id="search-count" class="mono" style="font-size: 11px; color: var(--text-dim); white-space: nowrap;">5 Protocols</span>
+        </div>
+
+        <!-- QRH Protocols Container -->
+        <div id="qrh-protocols-list">
+
+          <!-- Protocol 1: SANS (Spaceflight-Associated Neuro-ocular Syndrome) -->
+          <div class="qrh-card critical-qrh" data-keywords="sans vision optic blur eye cephalic pressure intracranial swelling">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <svg class="hud-icon" style="color: #38bdf8; width: 20px; height: 20px;" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <div>
+                  <div style="font-size: 14px; font-weight: 800; color: var(--text-highlight);">
+                    QRH-01: SANS &amp; Cephalic Venous Fluid Shift Crisis
+                  </div>
+                  <div style="font-size: 11px; color: var(--text-dim); font-family: var(--font-mono);">
+                    Indication: Progressive visual acuity reduction, optic disc edema, or severe cephalic headache.
+                  </div>
+                </div>
+              </div>
+              <span class="status-badge CRITICAL" style="font-size: 9.5px;">PRIORITY ALPHA</span>
+            </div>
+
+            <div class="qrh-checklist-steps">
+              <label class="qrh-step-item">
+                <input type="checkbox" class="qrh-step-checkbox">
+                <div>
+                  <strong style="color: var(--text-highlight); font-size: 12px;">Step 1: Head-Up Sleep Angle Adjustment</strong>
+                  <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
+                    Incline sleep berth head tether +15° relative to microgravity vectors to reduce hydrostatic venous pressure pooling in the cerebral vault.
+                  </p>
+                </div>
+              </label>
+
+              <label class="qrh-step-item">
+                <input type="checkbox" class="qrh-step-checkbox">
+                <div>
+                  <strong style="color: var(--text-highlight); font-size: 12px;">Step 2: Cabin Atmospheric CO₂ Audit</strong>
+                  <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
+                    Verify cabin partial pressure of CO₂ is &lt; 2.0 mmHg (&lt; 0.25%). Elevated CO₂ causes cerebral vasodilation that exacerbates intracranial hypertension.
+                  </p>
+                </div>
+              </label>
+
+              <label class="qrh-step-item">
+                <input type="checkbox" class="qrh-step-checkbox">
+                <div>
+                  <strong style="color: var(--text-highlight); font-size: 12px;">Step 3: Chibis Lower Body Negative Pressure (LBNP) Intervention</strong>
+                  <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
+                    Don Chibis LBNP suit and apply -25 to -35 mmHg negative pressure for 30 minutes to pull trapped interstitial fluid from head down to lower limbs.
+                  </p>
+                </div>
+              </label>
+
+              <label class="qrh-step-item">
+                <input type="checkbox" class="qrh-step-checkbox">
+                <div>
+                  <strong style="color: var(--text-highlight); font-size: 12px;">Step 4: On-Orbit Ultrasound ONSD Measurement</strong>
+                  <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
+                    Deploy medical ultrasound probe to scan optic nerve sheath diameter (ONSD); log metric into AstroHealth for flight surgeon telemetry packet.
+                  </p>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Protocol 2: Acute Space Motion Sickness (SMS) -->
+          <div class="qrh-card critical-qrh" data-keywords="sms motion sickness nausea vomit vomiting vertigo dizziness vestibular">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <svg class="hud-icon" style="color: #f59e0b; width: 20px; height: 20px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 15s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                <div>
+                  <div style="font-size: 14px; font-weight: 800; color: var(--text-highlight);">
+                    QRH-02: Acute Space Motion Sickness (SMS) &amp; Emesis Protocol
+                  </div>
+                  <div style="font-size: 11px; color: var(--text-dim); font-family: var(--font-mono);">
+                    Indication: Neuro-vestibular conflict, acute vertigo, nausea, or active projectile emesis in zero-G.
+                  </div>
+                </div>
+              </div>
+              <span class="status-badge WARNING" style="font-size: 9.5px;">PRIORITY BRAVO</span>
+            </div>
+
+            <div class="qrh-checklist-steps">
+              <label class="qrh-step-item">
+                <input type="checkbox" class="qrh-step-checkbox">
+                <div>
+                  <strong style="color: var(--text-highlight); font-size: 12px;">Step 1: Immediate Head Motion Restriction</strong>
+                  <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
+                    Immobilize crewmember head against flight seat headrest; prohibit pitch and yaw head movements to allow otolith-semicircular canal re-adaptation.
+                  </p>
+                </div>
+              </label>
+
+              <label class="qrh-step-item">
+                <input type="checkbox" class="qrh-step-checkbox">
+                <div>
+                  <strong style="color: var(--text-highlight); font-size: 12px;">Step 2: Deploy Hydrophobic Microgravity Emesis System</strong>
+                  <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
+                    Ensure emesis containment bag with sealable one-way airflow valve is prepped to prevent liquid droplet dispersion into cabin electronics.
+                  </p>
+                </div>
+              </label>
+
+              <label class="qrh-step-item">
+                <input type="checkbox" class="qrh-step-checkbox">
+                <div>
+                  <strong style="color: var(--text-highlight); font-size: 12px;">Step 3: Pharmacological Intervention (Antiemetic Formulary)</strong>
+                  <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
+                    Administer Promethazine (25 mg IM or oral suppository) from Onboard Medical Kit (OMK); note sedative side-effects and bar crew from EVA activities.
+                  </p>
+                </div>
+              </label>
+
+              <label class="qrh-step-item">
+                <input type="checkbox" class="qrh-step-checkbox">
+                <div>
+                  <strong style="color: var(--text-highlight); font-size: 12px;">Step 4: Continuous Oral Rehydration Monitoring</strong>
+                  <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
+                    Sip 250-500 mL electrolyte mineral fluid incrementally every 30 minutes to prevent microgravity hypovolemia and cardiac arrhythmia.
+                  </p>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Protocol 3: Decompression Sickness (DCS) -->
+          <div class="qrh-card critical-qrh" data-keywords="decompression dcs bends eva pressure joint pain chokes embolism airlock">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <svg class="hud-icon" style="color: #ef4444; width: 20px; height: 20px;" viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+                <div>
+                  <div style="font-size: 14px; font-weight: 800; color: var(--text-highlight);">
+                    QRH-03: Decompression Sickness (DCS) / The Bends Emergency
+                  </div>
+                  <div style="font-size: 11px; color: var(--text-dim); font-family: var(--font-mono);">
+                    Indication: Sudden joint arthralgia, tingling, paresthesia, or substernal chest tightness post-EVA.
+                  </div>
+                </div>
+              </div>
+              <span class="status-badge CRITICAL" style="font-size: 9.5px;">PRIORITY ALPHA</span>
+            </div>
+
+            <div class="qrh-checklist-steps">
+              <label class="qrh-step-item">
+                <input type="checkbox" class="qrh-step-checkbox">
+                <div>
+                  <strong style="color: var(--text-highlight); font-size: 12px;">Step 1: 100% Medical Oxygen Pre-Breathe Ingestion</strong>
+                  <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
+                    Don oxygen mask immediately with 100% O₂ flow to establish a steep nitrogen gradient and accelerate outgassing of intravascular bubble nuclei.
+                  </p>
+                </div>
+              </label>
+
+              <label class="qrh-step-item">
+                <input type="checkbox" class="qrh-step-checkbox">
+                <div>
+                  <strong style="color: var(--text-highlight); font-size: 12px;">Step 2: Left Lateral Trendelenburg Positioning</strong>
+                  <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
+                    Position astronaut on left lateral side with feet elevated 15° to trap any venous air emboli in the right ventricular apex, preventing cerebral arterial embolization.
+                  </p>
+                </div>
+              </label>
+
+              <label class="qrh-step-item">
+                <input type="checkbox" class="qrh-step-checkbox">
+                <div>
+                  <strong style="color: var(--text-highlight); font-size: 12px;">Step 3: Cabin/Airlock Maximum Pressurization</strong>
+                  <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
+                    If in airlock, maintain hyperbaric overpressure margin (&gt; 14.7 psi) or suit overpressure to physically compress gas bubbles in tissues.
+                  </p>
+                </div>
+              </label>
+
+              <label class="qrh-step-item">
+                <input type="checkbox" class="qrh-step-checkbox">
+                <div>
+                  <strong style="color: var(--text-highlight); font-size: 12px;">Step 4: IV Crystalloid Infusion (1,000 mL Saline)</strong>
+                  <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
+                    Initiate intravenous isotonic saline infusion to offset capillary endothelial leak, hemoconcentration, and microvascular sludging.
+                  </p>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Protocol 4: Solar Particle Event (SPE) Radiation Storm -->
+          <div class="qrh-card critical-qrh" data-keywords="radiation spe solar flare storm dosimeter sievert shelter proton particle">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <svg class="hud-icon" style="color: #ef4444; width: 20px; height: 20px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5"/><path d="M12 9.5V2m-2.16 14.5l-6.5 3.75m10.82-3.75l6.5 3.75"/><circle cx="12" cy="12" r="9" stroke-dasharray="1 3"/></svg>
+                <div>
+                  <div style="font-size: 14px; font-weight: 800; color: var(--text-highlight);">
+                    QRH-04: Solar Particle Event (SPE) Radiation Storm Shelter Protocol
+                  </div>
+                  <div style="font-size: 11px; color: var(--text-dim); font-family: var(--font-mono);">
+                    Indication: Ambient dosimeter flux exceeding 1.0 mSv/hr or Space Radiation Alert from mission computer.
+                  </div>
+                </div>
+              </div>
+              <span class="status-badge CRITICAL" style="font-size: 9.5px;">PRIORITY ALPHA</span>
+            </div>
+
+            <div class="qrh-checklist-steps">
+              <label class="qrh-step-item">
+                <input type="checkbox" class="qrh-step-checkbox">
+                <div>
+                  <strong style="color: var(--text-highlight); font-size: 12px;">Step 1: Sound Radiation Alarm &amp; Cease EVA</strong>
+                  <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
+                    Broadcast cabin-wide radiation alarm; immediately abort any external robotic arms, EVA spacewalks, or unshielded module access.
+                  </p>
+                </div>
+              </label>
+
+              <label class="qrh-step-item">
+                <input type="checkbox" class="qrh-step-checkbox">
+                <div>
+                  <strong style="color: var(--text-highlight); font-size: 12px;">Step 2: Retreat to Core Storm Shelter (Water Walls)</strong>
+                  <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
+                    All crew members muster into the core habitable volume enclosed by hydrogen-dense ECLSS water tanks and food stowage blocks for maximum proton attenuation.
+                  </p>
+                </div>
+              </label>
+
+              <label class="qrh-step-item">
+                <input type="checkbox" class="qrh-step-checkbox">
+                <div>
+                  <strong style="color: var(--text-highlight); font-size: 12px;">Step 3: Deploy Electronic &amp; Passive Personal Dosimeters</strong>
+                  <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
+                    Attach EPD (Electronic Personal Dosimeter) and TLD badges to chest harness; verify real-time telemetry logging is streaming into AstroHealth database.
+                  </p>
+                </div>
+              </label>
+
+              <label class="qrh-step-item">
+                <input type="checkbox" class="qrh-step-checkbox">
+                <div>
+                  <strong style="color: var(--text-highlight); font-size: 12px;">Step 4: Distribute Oral Radioprotective Countermeasures</strong>
+                  <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
+                    Ingest prescribed antioxidant cocktail (Vitamin E, C, N-acetylcysteine, Selenium) to scavenge free radicals generated by secondary bremsstrahlung photons.
+                  </p>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Protocol 5: Cabin Hypoxia & Hypercapnia Emergency -->
+          <div class="qrh-card critical-qrh" data-keywords="hypoxia hypercapnia co2 oxygen eclss breathing suffocating air scrubber toxic">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <svg class="hud-icon" style="color: #06b6d4; width: 20px; height: 20px;" viewBox="0 0 24 24"><path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2m13.7 4a2.5 2.5 0 1 1-1.8 4.3H2m16.5-8.3a2 2 0 1 1 1.5 3.7H6"/></svg>
+                <div>
+                  <div style="font-size: 14px; font-weight: 800; color: var(--text-highlight);">
+                    QRH-05: Cabin Hypoxia &amp; CO₂ Hypercapnia Emergency
+                  </div>
+                  <div style="font-size: 11px; color: var(--text-dim); font-family: var(--font-mono);">
+                    Indication: SpO₂ &lt; 90%, ambient O₂ &lt; 19.5%, or CO₂ &gt; 4.0 mmHg with confusion, dyspnea, or air hunger.
+                  </div>
+                </div>
+              </div>
+              <span class="status-badge CRITICAL" style="font-size: 9.5px;">PRIORITY ALPHA</span>
+            </div>
+
+            <div class="qrh-checklist-steps">
+              <label class="qrh-step-item">
+                <input type="checkbox" class="qrh-step-checkbox">
+                <div>
+                  <strong style="color: var(--text-highlight); font-size: 12px;">Step 1: Don Emergency Breathing Apparatus (EBA Hoods)</strong>
+                  <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
+                    Immediately pull and seal EBA personal positive-pressure hoods; verify 20-minute independent compressed O₂ cylinder actuation.
+                  </p>
+                </div>
+              </label>
+
+              <label class="qrh-step-item">
+                <input type="checkbox" class="qrh-step-checkbox">
+                <div>
+                  <strong style="color: var(--text-highlight); font-size: 12px;">Step 2: Inspect ECLSS Carbon Dioxide Scrubbers (CDRA)</strong>
+                  <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
+                    Check CDRA desiccant and zeolite adsorbent beds; confirm automated cycling valve is not jammed in half-open position.
+                  </p>
+                </div>
+              </label>
+
+              <label class="qrh-step-item">
+                <input type="checkbox" class="qrh-step-checkbox">
+                <div>
+                  <strong style="color: var(--text-highlight); font-size: 12px;">Step 3: Replace Auxiliary LiOH Chemical Scrub Canisters</strong>
+                  <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
+                    Retrieve fresh Lithium Hydroxide (LiOH) absorption canister from emergency locker; insert into secondary loop and seal latch.
+                  </p>
+                </div>
+              </label>
+
+              <label class="qrh-step-item">
+                <input type="checkbox" class="qrh-step-checkbox">
+                <div>
+                  <strong style="color: var(--text-highlight); font-size: 12px;">Step 4: Engage Manual Inter-Module Ventilation (IMV) Boost</strong>
+                  <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
+                    Set cabin ventilation fans to 100% capacity to eliminate microgravity stagnant CO₂ "pockets" surrounding sleeping or working crew.
+                  </p>
+                </div>
+              </label>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth-guard.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/emergency.js"></script>
+</body>
+</html>

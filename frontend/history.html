@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AstroHealth — Telemetry History & Trends</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .filter-btn-group {
+      display: inline-flex;
+      background: rgba(10, 16, 31, 0.7);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 3px;
+      gap: 4px;
+    }
+    .btn-filter {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 4px;
+      font-size: 11px;
+      cursor: pointer;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      transition: all 0.15s ease;
+    }
+    .btn-filter:hover {
+      color: var(--text-highlight);
+      border-color: var(--border-subtle);
+    }
+    .btn-filter.active {
+      background: var(--accent-cyan-dim);
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+    }
+    .chart-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 430px), 1fr));
+      gap: 20px;
+      margin-top: 14px;
+    }
+    @media (max-width: 768px) {
+      .chart-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+      .chart-card {
+        padding: 14px 12px;
+      }
+    }
+    .chart-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+      position: relative;
+      transition: border-color 0.2s ease;
+    }
+    .chart-card:hover {
+      border-color: var(--border-medium);
+    }
+    .chart-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-highlight);
+      letter-spacing: 0.02em;
+    }
+    .chart-header .chart-title-tag {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .chart-wrapper {
+      position: relative;
+      height: 220px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="app-shell">
+    <main class="app-main">
+      <div class="page-content">
+
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="mono" style="font-size: 11px; color: var(--accent-cyan); letter-spacing: 0.1em; text-transform: uppercase;">
+                TELEMETRY REPOSITORY // CHRONO-LOG
+              </span>
+            </div>
+            <h1 style="font-size: 24px; font-weight: 800; letter-spacing: -0.01em; margin-top: 2px;">
+              Telemetry History & Trend Analytics
+            </h1>
+            <p style="color: var(--text-muted); font-size: 12.5px; margin-top: 2px;">
+              Empirical physiological and behavioral logs evaluated against rolling personal baselines.
+            </p>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <a href="dossier.html" class="btn-secondary" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; font-size: 11px; border-color: rgba(0, 240, 255, 0.4); color: var(--accent-cyan); text-decoration: none;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              <span>CLINICAL DOSSIER</span>
+            </a>
+            <div class="filter-btn-group">
+              <button class="btn-filter" data-filter="today">TODAY</button>
+              <button class="btn-filter" data-filter="7d">7 DAYS</button>
+              <button class="btn-filter active" data-filter="14d">14 DAYS</button>
+              <button class="btn-filter" data-filter="30d">30 DAYS</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <svg class="hud-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg> Recorded Mission Health Records
+            </div>
+            <span id="table-count-badge" class="mono" style="font-size: 11px; color: var(--accent-cyan);">
+              Loading...
+            </span>
+          </div>
+
+          <div class="table-container">
+            <table class="telemetry-table">
+              <thead>
+                <tr>
+                  <th>Date (UTC)</th>
+                  <th>Mission Day</th>
+                  <th>Heart Rate</th>
+                  <th>SpO₂</th>
+                  <th>Sleep</th>
+                  <th>Exercise</th>
+                  <th>Stress</th>
+                  <th>Mood</th>
+                  <th>Radiation</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="history-table-body">
+                <tr>
+                  <td colspan="10" style="text-align: center; color: var(--text-muted); padding: 24px;">
+                    Connecting to local spacecraft telemetry store...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div>
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+            <h2 style="font-size: 15px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-highlight);">
+              Empirical Multi-Day Telemetry Trends
+            </h2>
+            <span class="mono" style="font-size: 11px; color: var(--accent-cyan);">
+              LOCAL EVALUATION // ZERO PREDICTIVE ML
+            </span>
+          </div>
+          <p style="font-size: 12px; color: var(--text-muted);">
+            Monitors physiological adaptation curves, baseline shifts, countermeasure adherence, and cumulative deep-space exposure.
+          </p>
+
+          <div class="chart-grid">
+            
+            <div class="chart-card">
+              <div class="chart-header">
+                <div class="chart-title-tag">
+                  <svg class="hud-icon" style="color: var(--accent-cyan); margin-right: 2px;" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                  <span>Heart Rate vs 14-Day Baseline</span>
+                </div>
+                <span class="mono" style="font-size: 10.5px; color: var(--accent-cyan);">BPM</span>
+              </div>
+              <div class="chart-wrapper">
+                <canvas id="chart-heart-rate"></canvas>
+              </div>
+            </div>
+
+            <div class="chart-card">
+              <div class="chart-header">
+                <div class="chart-title-tag">
+                  <svg class="hud-icon" style="color: #00e676; margin-right: 2px;" viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+                  <span>Blood Oxygen Saturation (SpO₂)</span>
+                </div>
+                <span class="mono" style="font-size: 10.5px; color: #00e676;">%</span>
+              </div>
+              <div class="chart-wrapper">
+                <canvas id="chart-spo2"></canvas>
+              </div>
+            </div>
+
+            <div class="chart-card">
+              <div class="chart-header">
+                <div class="chart-title-tag">
+                  <svg class="hud-icon" style="color: #818cf8; margin-right: 2px;" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                  <span>Sleep Duration per 24h Cycle</span>
+                </div>
+                <span class="mono" style="font-size: 10.5px; color: #818cf8;">HOURS</span>
+              </div>
+              <div class="chart-wrapper">
+                <canvas id="chart-sleep"></canvas>
+              </div>
+            </div>
+
+            <div class="chart-card">
+              <div class="chart-header">
+                <div class="chart-title-tag">
+                  <svg class="hud-icon" style="color: #38bdf8; margin-right: 2px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                  <span>Exercise Countermeasure Duration</span>
+                </div>
+                <span class="mono" style="font-size: 10.5px; color: #38bdf8;">HOURS</span>
+              </div>
+              <div class="chart-wrapper">
+                <canvas id="chart-exercise"></canvas>
+              </div>
+            </div>
+
+            <div class="chart-card">
+              <div class="chart-header">
+                <div class="chart-title-tag">
+                  <svg class="hud-icon" style="color: #fbbf24; margin-right: 2px;" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+                  <span>Subjective Stress Trajectory</span>
+                </div>
+                <span class="mono" style="font-size: 10.5px; color: #fbbf24;">SCORE</span>
+              </div>
+              <div class="chart-wrapper">
+                <canvas id="chart-stress"></canvas>
+              </div>
+            </div>
+
+            <div class="chart-card">
+              <div class="chart-header">
+                <div class="chart-title-tag">
+                  <svg class="hud-icon" style="color: #ff5252; margin-right: 2px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5"/><path d="M12 9.5V2m-2.16 14.5l-6.5 3.75m10.82-3.75l6.5 3.75"/><circle cx="12" cy="12" r="9" stroke-dasharray="1 3"/></svg>
+                  <span>Cumulative Mission Radiation Dose</span>
+                </div>
+                <span class="mono" style="font-size: 10.5px; color: #ff5252;">mSv (SIM)</span>
+              </div>
+              <div class="chart-wrapper">
+                <canvas id="chart-radiation"></canvas>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="assets/js/chart.umd.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth-guard.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/history.js"></script>
+</body>
+</html>
