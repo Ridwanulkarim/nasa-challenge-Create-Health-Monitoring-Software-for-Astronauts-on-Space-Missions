@@ -30,11 +30,14 @@ During long-duration deep space exploration, astronauts travel far beyond low Ea
 |                            SPACECRAFT ONBOARD NETWORK                             |
 |                                                                                   |
 |   +---------------------------------------------------------------------------+   |
-|   |                 PRESENTATION LAYER (Local Browser Clients)                |   |
-|   |  - HTML5 / CSS3 / Vanilla JavaScript (No frontend frameworks)             |   |
-|   |  - Local Chart.js (chart.umd.min.js - bundled locally, zero CDN)          |   |
-|   |  - Shared Modular JS: layout.js | auth-guard.js | api.js                  |   |
-|   |  - High-contrast Space Mission Dark UI with Telemetry Badges              |   |
+|   |                 PRESENTATION LAYER (React 18 + Vite SPA)                  |   |
+|   |  - React 18 Single Page Application with Vite 6 build pipeline (`client/`)|   |
+|   |  - React Router v6 for zero-flicker deep-space client navigation          |   |
+|   |  - AuthContext hook (`useAuth`) with JWT token storage & session handling  |   |
+|   |  - React-Chartjs-2 for dynamic 14-day clinical baseline trends & radiation|   |
+|   |  - Wearable IoT BLE Ingestion (WHOOP 4.0 & Fitbit Sense simulation)       |   |
+|   |  - Hands-Free Web Speech API Voice Dictation with natural biometric parser|   |
+|   |  - Cinematic NASA Space-to-Mars gradient & glassmorphic telemetry cards   |   |
 |   +---------------------------------------------------------------------------+   |
 |                                      | HTTP / REST (JSON)                         |
 |                                      v                                            |
@@ -262,7 +265,14 @@ cd backend
 npm install
 ```
 
-### Step 3: Configure Environment Variables
+### Step 3: Install & Build React Client
+```bash
+cd ../client
+npm install
+npm run build
+```
+
+### Step 4: Configure Environment Variables
 Verify or edit `backend/.env`:
 ```ini
 PORT=3000
@@ -276,18 +286,18 @@ JWT_EXPIRES_IN=24h
 DEMO_MODE=true
 ```
 
-### Step 4: Seed Database & Generate 15 Days of Telemetry
+### Step 5: Seed Database & Generate 15 Days of Telemetry
 Make sure your local MySQL server is running, then run:
 ```bash
 # From project root:
-node database/seed.js
+npm run seed
 
 # Or from backend:
-npm run seed
+node ../database/seed.js
 ```
-*This automatically creates `astronaut_health_db`, applies `database/schema.sql` (all 13 tables), hashes demo passwords using `bcryptjs`, and populates 15 days of historical telemetry.*
+*This automatically creates `astronaut_health_db`, applies `database/schema.sql` (all 13 tables), hashes passwords using `bcryptjs`, and populates 15 days of historical telemetry.*
 
-### Step 5: Start the Spacecraft Onboard Server
+### Step 6: Start the Spacecraft Onboard Server
 ```bash
 # From project root:
 npm start
@@ -295,17 +305,20 @@ npm start
 # Or from backend:
 node server.js
 ```
-The server will start on: **`http://localhost:3000`**
+The unified server will start on: **`http://localhost:3000`** (serving the compiled React SPA).
 
-### Step 6: Access the Application
-Open your web browser and navigate to:
+### Step 7 (Optional): Fast Vite Development Mode
+For instant Hot Module Replacement (HMR) during frontend development:
+```bash
+npm run client:dev
+```
+*Runs Vite dev server at `http://localhost:5173` with automated API proxying to `http://localhost:3000`.*
+
+### Step 8: Access the Application
+Open your browser and navigate to:
 **`http://localhost:3000`**
 
-Use the **Quick-Fill Demo Buttons** to log in as:
-1. `commander` (Alex Vance) $\to$ **NORMAL**
-2. `pilot` (Elena Rostova) $\to$ **WARNING**
-3. `specialist` (Marcus Chen) $\to$ **CRITICAL**
-4. `flight_director` (Ground Ops) $\to$ **MISSION CONTROL**
+Log in using your astronaut name / call sign (e.g. `sajid`, `Alex Vance`), select your mission role (e.g., `Astronaut`, `Mission Commander`), and enter the simulation passcode (`password`).
 
 ---
 
