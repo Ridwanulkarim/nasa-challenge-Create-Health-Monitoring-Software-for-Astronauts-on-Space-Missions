@@ -27,7 +27,7 @@ async function login(req, res, next) {
     let targetAstronautId = clean.toUpperCase();
 
     // Check specific preset identifiers
-    if (['ast-001', 'ast001', 'ast1', 'vance', 'alex', 'alex vance', 'commander'].includes(clean)) {
+    if (['ast-001', 'ast001', 'ast1', 'commander', 'sajid'].includes(clean)) {
       targetUsername = 'commander';
       targetAstronautId = 'AST-001';
     } else if (clean.includes('demo') || clean === 'demo@platform.com') {
@@ -101,9 +101,9 @@ async function login(req, res, next) {
     if (user && isAccountIdentifier) {
       // User authenticated via email (e.g. demo@platform.com) or system identifier.
       // Retain their genuine astronaut profile name rather than turning the email into their name.
-      if (['demo', 'demo@platform.com', 'commander', 'ast-001', 'alex vance'].includes(clean)) {
-        effectiveFirstName = 'Alex';
-        effectiveLastName = 'Vance';
+      if (['demo', 'demo@platform.com', 'commander', 'ast-001', 'sajid'].includes(clean)) {
+        effectiveFirstName = 'Sajid';
+        effectiveLastName = '';
       } else if (['pilot', 'ast-002', 'rostova', 'elena rostova'].includes(clean)) {
         effectiveFirstName = 'Elena';
         effectiveLastName = 'Rostova';

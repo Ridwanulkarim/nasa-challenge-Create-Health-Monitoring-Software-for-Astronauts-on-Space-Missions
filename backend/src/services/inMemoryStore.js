@@ -18,7 +18,7 @@ const ASTRONAUTS = [
     astronaut_id: 'AST-001',
     mission_id: 'ARTEMIS-III',
     first_name: 'Sajid',
-    last_name: 'Vance',
+    last_name: '',
     role_title: 'Mission Commander',
     date_of_birth: '1988-04-12',
     created_at: '2026-09-01T00:00:00Z'
@@ -70,7 +70,7 @@ let USERS = [
   {
     user_id: 'usr-ast-001',
     username: 'commander',
-    email: 'sajid.vance@nasa.space',
+    email: 'sajid@nasa.space',
     password_hash: bcrypt.hashSync('AstroPass2026!', 6),
     role: 'ASTRONAUT',
     astronaut_id: 'AST-001'

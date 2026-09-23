@@ -58,7 +58,7 @@
       <form id="login-form">
         <div class="form-group">
           <label class="form-label" for="astronaut_name">Astronaut Name / Operator Call Sign</label>
-          <input type="text" id="astronaut_name" class="form-input" value="Sajid" placeholder="Enter your name / call sign (e.g., Sajid, Alex Vance)" required autocomplete="name">
+          <input type="text" id="astronaut_name" class="form-input" value="Sajid" placeholder="Enter your name / call sign (e.g., Sajid)" required autocomplete="name">
         </div>
 
         <div class="form-group">
@@ -83,31 +83,6 @@
           AUTHENTICATE TELEMETRY SESSION
         </button>
       </form>
-
-      <!-- Fast Launch Crew Selector -->
-      <div style="margin-top: 18px;">
-        <div style="font-size: 10.5px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); text-align: center; margin-bottom: 8px;">
-          Fast Launch Crew Profile:
-        </div>
-        <div class="auth-quick-fill-grid">
-          <button type="button" class="btn-quick-fill" onclick="quickFill('Sajid', 'Mission Commander', 'AstroPass2026!')">
-            <span>🚀 Commander Sajid</span>
-            Artemis III CDR
-          </button>
-          <button type="button" class="btn-quick-fill" onclick="quickFill('Alex Vance', 'Astronaut', 'AstroPass2026!')">
-            <span>👨‍🚀 Alex Vance</span>
-            Baseline AST-001
-          </button>
-          <button type="button" class="btn-quick-fill" onclick="quickFill('Elena Rostova', 'Chief Medical Officer', 'AstroPass2026!')">
-            <span>👩‍⚕️ Dr. Elena Rostova</span>
-            CMO AST-002
-          </button>
-          <button type="button" class="btn-quick-fill" onclick="quickFill('Ground Control', 'Flight Director', 'MissionControl2026!')">
-            <span>📡 Flight Director</span>
-            Ground Ops (JSC)
-          </button>
-        </div>
-      </div>
 
       <div class="auth-credentials-hint" style="margin-top: 20px;">
         <div><strong>Default Passcode:</strong> <span>AstroPass2026!</span> &bull; <span>MissionControl2026!</span></div>
@@ -163,13 +138,6 @@
           window.location.href = 'dashboard.html';
         }
       }
-    }
-
-    function quickFill(name, role, pass) {
-      document.getElementById('astronaut_name').value = name;
-      document.getElementById('astronaut_role').value = role;
-      document.getElementById('password').value = pass;
-      executeAuth(name, pass, name, role);
     }
 
     document.getElementById('login-form').addEventListener('submit', (e) => {

@@ -103,8 +103,8 @@ async function seed() {
       {
         id: 'AST-001',
         mission_id: 'ARTEMIS-III',
-        first_name: 'Alex',
-        last_name: 'Vance',
+        first_name: 'Sajid',
+        last_name: '',
         role_title: 'Mission Commander',
         dob: '1988-04-12'
       },
@@ -142,7 +142,7 @@ async function seed() {
       {
         id: 'usr-ast-001',
         username: 'commander',
-        email: 'alex.vance@nasa.space',
+        email: 'sajid@nasa.space',
         hash: astroPasswordHash,
         role: 'ASTRONAUT',
         astronaut_id: 'AST-001'
@@ -566,7 +566,7 @@ async function seed() {
     console.log('  DATABASE SEEDING COMPLETED SUCCESSFULLY!');
     console.log('================================================================');
     console.log('\nDemo User Accounts Created:');
-    console.log('  1. AST-001 (Alex Vance - Commander):');
+    console.log('  1. AST-001 (Sajid - Commander):');
     console.log('     Username: commander          Password: AstroPass2026!        [Status: NORMAL]');
     console.log('  2. AST-002 (Elena Rostova - Pilot):');
     console.log('     Username: pilot              Password: AstroPass2026!        [Status: WARNING]');
