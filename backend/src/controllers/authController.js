@@ -45,45 +45,49 @@ async function login(req, res, next) {
       targetUsername = 'admin';
     }
 
-    const [users] = await pool.query(`
-      SELECT 
-        u.user_id,
-        u.username,
-        u.email,
-        u.password_hash,
-        u.role,
-        u.astronaut_id,
-        a.first_name,
-        a.last_name,
-        a.role_title,
-        m.name AS mission_name,
-        m.mission_id
-      FROM users u
-      LEFT JOIN astronauts a ON u.astronaut_id = a.astronaut_id
-      LEFT JOIN missions m ON a.mission_id = m.mission_id
-      WHERE LOWER(u.username) = ? 
-         OR LOWER(u.username) = ?
-         OR LOWER(u.email) = ? 
-         OR u.astronaut_id = ?
-         OR LOWER(u.astronaut_id) = ?
-         OR LOWER(REPLACE(COALESCE(u.astronaut_id, ''), '-', '')) = ?
-         OR LOWER(COALESCE(a.first_name, '')) = ?
-         OR LOWER(COALESCE(a.last_name, '')) = ?
-         OR LOWER(CONCAT(COALESCE(a.first_name, ''), ' ', COALESCE(a.last_name, ''))) = ?
-      LIMIT 1;
-    `, [
-      clean,
-      targetUsername,
-      clean,
-      targetAstronautId,
-      clean,
-      clean.replace('-', ''),
-      clean,
-      clean,
-      clean
-    ]);
-
-    let user = users[0];
+    let user = null;
+    try {
+      const [users] = await pool.query(`
+        SELECT 
+          u.user_id,
+          u.username,
+          u.email,
+          u.password_hash,
+          u.role,
+          u.astronaut_id,
+          a.first_name,
+          a.last_name,
+          a.role_title,
+          m.name AS mission_name,
+          m.mission_id
+        FROM users u
+        LEFT JOIN astronauts a ON u.astronaut_id = a.astronaut_id
+        LEFT JOIN missions m ON a.mission_id = m.mission_id
+        WHERE LOWER(u.username) = ? 
+           OR LOWER(u.username) = ?
+           OR LOWER(u.email) = ? 
+           OR u.astronaut_id = ?
+           OR LOWER(u.astronaut_id) = ?
+           OR LOWER(REPLACE(COALESCE(u.astronaut_id, ''), '-', '')) = ?
+           OR LOWER(COALESCE(a.first_name, '')) = ?
+           OR LOWER(COALESCE(a.last_name, '')) = ?
+           OR LOWER(CONCAT(COALESCE(a.first_name, ''), ' ', COALESCE(a.last_name, ''))) = ?
+        LIMIT 1;
+      `, [
+        clean,
+        targetUsername,
+        clean,
+        targetAstronautId,
+        clean,
+        clean.replace('-', ''),
+        clean,
+        clean,
+        clean
+      ]);
+      user = users[0];
+    } catch (dbErr) {
+      console.warn('[AUTH] Database query unavailable, using autonomous onboard fallback:', dbErr.message);
+    }
 
     // Check if user entered a known account identifier or email
     const isKnownAccount = ['commander', 'pilot', 'specialist', 'demo', 'flight_director', 'admin'].includes(targetUsername);
@@ -139,12 +143,17 @@ async function login(req, res, next) {
       effectiveRoleTitle = customRole || 'Astronaut';
 
       if (!user) {
-        // Pick an astronaut user to associate with
-        const [astUserRows] = await pool.query(`SELECT * FROM users WHERE role = 'ASTRONAUT' LIMIT 1;`);
+        let astUserRows = [];
+        try {
+          const [rows] = await pool.query(`SELECT * FROM users WHERE role = 'ASTRONAUT' LIMIT 1;`);
+          astUserRows = rows;
+        } catch (dbErr) {
+          console.warn('[AUTH] Users table query unavailable:', dbErr.message);
+        }
         user = astUserRows[0] || {
-          user_id: 'usr-custom',
-          username: clean,
-          role: 'ASTRONAUT',
+          user_id: 'usr-' + (clean || 'custom'),
+          username: clean || 'sajid',
+          role: (clean.includes('director') || clean.includes('ground') || (customRole && customRole.includes('Control'))) ? 'MISSION_CONTROL' : 'ASTRONAUT',
           astronaut_id: 'AST-001'
         };
       }

@@ -63,7 +63,20 @@ export const api = {
       config.body = JSON.stringify(options.body);
     }
 
-    const response = await fetch(url, config);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 6000);
+
+    let response;
+    try {
+      response = await fetch(url, { ...config, signal: controller.signal });
+    } catch (err) {
+      if (err.name === 'AbortError') {
+        throw new Error('Spacecraft link timeout. Switch to Autonomous Simulation Mode.');
+      }
+      throw err;
+    } finally {
+      clearTimeout(timeoutId);
+    }
 
     if (response.status === 401 && !url.includes('/auth/login')) {
       this.removeToken();

@@ -23,6 +23,7 @@ const pool = connectionUri
       waitForConnections: true,
       connectionLimit: 10,
       queueLimit: 0,
+      connectTimeout: 4000,
       ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : undefined
     });
 
@@ -30,12 +31,13 @@ const pool = connectionUri
 async function testConnection() {
   try {
     const connection = await pool.getConnection();
-    console.log(`[DB] Successfully connected to MySQL database: ${dbConfig.database}`);
+    const dbName = process.env.DB_NAME || 'astronaut_health_db';
+    console.log(`[DB] Successfully connected to MySQL database: ${dbName}`);
     connection.release();
     return true;
   } catch (error) {
     console.warn(`[DB WARNING] Could not connect to MySQL: ${error.message}`);
-    console.warn('[DB WARNING] Ensure MySQL is running and credentials in .env are correct.');
+    console.warn('[DB WARNING] Spacecraft running in autonomous simulation mode.');
     return false;
   }
 }
