@@ -32,6 +32,12 @@ export default function AppLayout() {
         <Topbar onToggleMobile={() => setMobileOpen(prev => !prev)} />
         <main className="content-area">
           <Outlet />
+          <footer style={{ marginTop: '32px', marginBottom: '16px' }}>
+            <div className="disclaimer-banner">
+              <strong>SIMULATED DEMONSTRATION NOTICE:</strong> The health values displayed in this prototype are simulated data for demonstration purposes. Monitored health indicators and health considerations are informed by NASA's human spaceflight research.<br />
+              <strong>DECISION-SUPPORT ONLY:</strong> All numerical thresholds are illustrative demonstration values, NOT official NASA medical limits. This is an onboard monitoring and decision-support prototype, NOT a medical diagnosis system.
+            </div>
+          </footer>
         </main>
       </div>
     </div>

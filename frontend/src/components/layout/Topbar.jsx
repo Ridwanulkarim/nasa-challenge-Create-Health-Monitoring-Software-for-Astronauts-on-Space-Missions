@@ -1,10 +1,11 @@
 /**
  * NASA Space Apps Challenge 2026: AstroHealth
- * Topbar Component: client/src/components/layout/Topbar.jsx
+ * Topbar Component: frontend/src/components/layout/Topbar.jsx
  */
 
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import api from '../../services/api';
 
 export default function Topbar({ onToggleMobile }) {
   const { user } = useAuth();
@@ -19,7 +20,8 @@ export default function Topbar({ onToggleMobile }) {
     return parseInt(localStorage.getItem('astro_comms_idx') || '0', 10);
   });
 
-  const [missionTime, setMissionTime] = useState('');
+  const [missionTime, setMissionTime] = useState('MET 023:14:32:08');
+  const [activeScenario, setActiveScenario] = useState('NORMAL');
 
   useEffect(() => {
     const updateTime = () => {
@@ -27,7 +29,7 @@ export default function Topbar({ onToggleMobile }) {
       const hrs = String(now.getUTCHours()).padStart(2, '0');
       const mins = String(now.getUTCMinutes()).padStart(2, '0');
       const secs = String(now.getUTCSeconds()).padStart(2, '0');
-      setMissionTime(`MET: D+023 ${hrs}:${mins}:${secs} UTC`);
+      setMissionTime(`MET 023:${hrs}:${mins}:${secs}`);
     };
     updateTime();
     const interval = setInterval(updateTime, 1000);
@@ -38,6 +40,17 @@ export default function Topbar({ onToggleMobile }) {
     const nextIdx = (commsIndex + 1) % commsStates.length;
     setCommsIndex(nextIdx);
     localStorage.setItem('astro_comms_idx', nextIdx.toString());
+  };
+
+  const handleScenarioChange = async (scenario) => {
+    setActiveScenario(scenario);
+    try {
+      await api.post('/demo/scenario', { scenario });
+      window.location.reload();
+    } catch (err) {
+      console.warn('Scenario switch notice:', err.message);
+      window.location.reload();
+    }
   };
 
   const activeComms = commsStates[commsIndex];
@@ -57,6 +70,7 @@ export default function Topbar({ onToggleMobile }) {
             <line x1="3" y1="18" x2="21" y2="18"></line>
           </svg>
         </button>
+
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <img 
             src="/assets/images/nasa-logo.svg" 
@@ -68,23 +82,54 @@ export default function Topbar({ onToggleMobile }) {
             <span className="mission-tag">{user?.missionName || 'ARTEMIS III'}</span>
           </div>
         </div>
+
+        <div className="live-hud-ticker">
+          <span id="live-met-clock">{missionTime}</span>
+          <span style={{ color: 'var(--border-medium)' }}>|</span>
+          <span style={{ color: 'var(--accent-cyan)' }}>ORBIT: 110x105 km</span>
+        </div>
       </div>
 
       <div className="topbar-right">
+        {/* Scenario Switcher Bar */}
+        <div className="scenario-bar">
+          <span className="scenario-label">Flight Scenario:</span>
+          <button 
+            type="button"
+            className={`btn-scenario normal ${activeScenario === 'NORMAL' ? 'active' : ''}`}
+            onClick={() => handleScenarioChange('NORMAL')}
+            title="Inject Nominal Spaceflight Baseline"
+          >
+            [ NORMAL ]
+          </button>
+          <button 
+            type="button"
+            className={`btn-scenario warning ${activeScenario === 'WARNING' ? 'active' : ''}`}
+            onClick={() => handleScenarioChange('WARNING')}
+            title="Inject Elevated Cardiac & Radiation Telemetry"
+          >
+            [ WARNING ]
+          </button>
+          <button 
+            type="button"
+            className={`btn-scenario critical ${activeScenario === 'CRITICAL' ? 'active' : ''}`}
+            onClick={() => handleScenarioChange('CRITICAL')}
+            title="Inject Acute Microgravity Distress Scenario"
+          >
+            [ CRITICAL ]
+          </button>
+        </div>
+
+        {/* Comms Link Pill */}
         <div 
-          className="comms-status-pill" 
-          id="comms-link-badge"
-          title="Simulate Spacecraft Communication Latency (Click to cycle)"
+          id="btn-comms-toggle"
+          className={`comms-badge ${activeComms.id}`}
+          title="Simulated Earth link: Click to cycle ONLINE / DELAYED / OFFLINE"
           onClick={handleCycleComms}
           style={{ cursor: 'pointer' }}
         >
-          <span className={`pulse-dot ${activeComms.id}`}></span>
-          <span className="comms-label">{activeComms.label}</span>
-          <span className="comms-latency">[{activeComms.latency}]</span>
-        </div>
-
-        <div className="telemetry-timestamp mono" id="topbar-clock">
-          {missionTime}
+          <span className="comms-dot"></span>
+          <span id="comms-text">{activeComms.label}</span>
         </div>
       </div>
     </header>

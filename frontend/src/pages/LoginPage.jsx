@@ -1,6 +1,7 @@
 /**
  * NASA Space Apps Challenge 2026: AstroHealth
  * Login Page: frontend/src/pages/LoginPage.jsx
+ * Exactly reproduces the original index.html structure, typography, and styles in React.
  */
 
 import React, { useState, useEffect } from 'react';
@@ -90,25 +91,26 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="auth-page" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px 16px' }}>
-      <div className="auth-container" style={{ maxWidth: '480px', width: '100%' }}>
-        <div className="auth-header" style={{ textAlign: 'center', marginBottom: '22px' }}>
-          <div className="auth-logo" style={{ display: 'inline-block', marginBottom: '12px' }}>
-            <img 
-              src="/assets/images/nasa-logo.svg" 
-              alt="NASA Meatball Insignia" 
-              style={{ height: '64px', width: 'auto', filter: 'drop-shadow(0 0 16px rgba(0, 240, 255, 0.45))' }}
-            />
+    <div className="auth-wrapper">
+      <div className="auth-container">
+        
+        {/* Exact Original NASA Space Apps Header */}
+        <div className="auth-header" style={{ textAlign: 'center', marginBottom: '24px' }}>
+          <div className="auth-logo">
+            <img src="/assets/images/nasa-logo.svg" alt="NASA Meatball Insignia" />
           </div>
-          <h1 style={{ fontSize: '22px', fontWeight: 800, letterSpacing: '0.04em', color: 'var(--text-highlight)' }}>
-            AstroHealth Telemetry
-          </h1>
-          <p className="subtitle" style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>
-            Autonomous Deep-Space Bio-Telemetry & Decision Support
+          <h2 style={{ fontSize: '21px', fontWeight: 800, letterSpacing: '0.05em', color: '#ffffff', marginTop: '2px' }}>
+            ASTROHEALTH TELEMETRY
+          </h2>
+          <div style={{ color: 'var(--accent-cyan)', fontSize: '10.5px', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '0.14em', fontWeight: 700, marginTop: '4px' }}>
+            NASA Space Apps Challenge 2026
+          </div>
+          <p style={{ color: '#93c5fd', fontSize: '11.5px', marginTop: '5px', fontStyle: 'italic', opacity: 0.95 }}>
+            &ldquo;Science is a beautiful gift to humanity.&rdquo;
           </p>
-          <div className="mission-tag" style={{ display: 'inline-block', marginTop: '8px' }}>
-            MISSION: ARTEMIS III / MARS TRANSIT
-          </div>
+          <p style={{ color: 'var(--text-dim)', fontSize: '11px', marginTop: '3px', letterSpacing: '0.02em' }}>
+            Autonomous Onboard Health Monitoring &amp; Decision-Support System
+          </p>
         </div>
 
         {error && (
@@ -117,73 +119,72 @@ export default function LoginPage() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit}>
-          <div className="form-group" style={{ marginBottom: '14px' }}>
+        <form onSubmit={handleSubmit} id="login-form">
+          <div className="form-group">
             <label className="form-label" htmlFor="astronaut_name">
-              Astronaut Name / Call Sign
+              Astronaut Name / Operator Call Sign
             </label>
             <input 
               type="text" 
               id="astronaut_name" 
               className="form-input" 
-              placeholder="e.g. Sajid, Alex Vance" 
+              placeholder="Enter your name / call sign (e.g. Sajid, Alex Vance)" 
               autoComplete="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
           </div>
 
-          <div className="form-group" style={{ marginBottom: '14px' }}>
+          <div className="form-group">
             <label className="form-label" htmlFor="astronaut_role">
               Mission Role / Rank
             </label>
             <select 
               id="astronaut_role" 
-              className="form-input"
+              className="form-select"
+              style={{ width: '100%' }}
               value={roleTitle}
               onChange={(e) => setRoleTitle(e.target.value)}
             >
-              <option value="Mission Commander">Mission Commander (CDR)</option>
-              <option value="Astronaut">Astronaut (Standard Crew Baseline)</option>
-              <option value="Command Module Pilot">Command Module Pilot (CMP)</option>
-              <option value="Mission Specialist">Mission Specialist (MS-1)</option>
-              <option value="Flight Surgeon">Flight Surgeon (Aerospace MD)</option>
-              <option value="Payload Specialist">Payload Specialist (PS)</option>
-              <option value="Mission Control Specialist">Mission Control Ground Specialist</option>
+              <option value="Mission Commander">Mission Commander</option>
+              <option value="Astronaut">Astronaut</option>
+              <option value="Flight Engineer & Pilot">Flight Engineer &amp; Pilot</option>
+              <option value="Science Payload Specialist">Science Payload Specialist</option>
+              <option value="Chief Medical Officer">Chief Medical Officer</option>
+              <option value="EVA Operations Specialist">EVA Operations Specialist</option>
+              <option value="Flight Director">Flight Director (Ground Ops)</option>
             </select>
           </div>
 
-          <div className="form-group" style={{ marginBottom: '16px' }}>
+          <div className="form-group">
             <label className="form-label" htmlFor="password">
-              Telemetry Security Passcode
+              Security Passcode
             </label>
             <input 
               type="password" 
               id="password" 
               className="form-input" 
-              placeholder="Enter terminal passcode" 
+              placeholder="••••••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <small style={{ color: 'var(--text-dim)', fontSize: '11px', marginTop: '4px', display: 'block' }}>
-              Standard Mission Simulation Mode Active (Passcode preset to <code>AstroPass2026!</code>)
-            </small>
           </div>
 
           <button 
             type="submit" 
-            className="btn btn-primary" 
-            style={{ width: '100%', padding: '13px', fontSize: '13px', fontWeight: 700, letterSpacing: '0.05em' }}
+            id="btn-login-submit"
+            className="btn-primary" 
+            style={{ width: '100%', marginTop: '8px', padding: '12px', fontSize: '12px' }}
             disabled={loading}
           >
-            {loading ? 'AUTHENTICATING TELEMETRY SESSION...' : 'AUTHENTICATE TELEMETRY SESSION'}
+            {loading ? 'Verifying telemetry credentials...' : 'AUTHENTICATE TELEMETRY SESSION'}
           </button>
         </form>
 
         {/* Quick Select Crew Profiles */}
-        <div style={{ marginTop: '20px' }}>
-          <div style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-dim)', textAlign: 'center', marginBottom: '8px' }}>
-            Or 1-Click Fast Launch Crew Profile:
+        <div style={{ marginTop: '18px' }}>
+          <div style={{ fontSize: '10.5px', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-dim)', textAlign: 'center', marginBottom: '8px' }}>
+            Fast Launch Crew Profile:
           </div>
           <div className="auth-quick-fill-grid">
             <button 
@@ -197,7 +198,7 @@ export default function LoginPage() {
             <button 
               type="button" 
               className="btn-quick-fill"
-              onClick={() => handleQuickSelect('Alex Vance', 'Mission Commander', 'AstroPass2026!')}
+              onClick={() => handleQuickSelect('Alex Vance', 'Astronaut', 'AstroPass2026!')}
             >
               <span>👨‍🚀 Alex Vance</span>
               Baseline AST-001
@@ -205,25 +206,35 @@ export default function LoginPage() {
             <button 
               type="button" 
               className="btn-quick-fill"
-              onClick={() => handleQuickSelect('Elena Rostova', 'Flight Surgeon', 'AstroPass2026!')}
+              onClick={() => handleQuickSelect('Elena Rostova', 'Chief Medical Officer', 'AstroPass2026!')}
             >
               <span>👩‍⚕️ Dr. Elena Rostova</span>
-              Flight Surgeon AST-002
+              CMO AST-002
             </button>
             <button 
               type="button" 
               className="btn-quick-fill"
-              onClick={() => handleQuickSelect('Ground Control', 'Mission Control Specialist', 'MissionControl2026!')}
+              onClick={() => handleQuickSelect('Ground Control', 'Flight Director', 'MissionControl2026!')}
             >
               <span>📡 Flight Director</span>
-              Mission Control Ground
+              Ground Ops (JSC)
             </button>
           </div>
         </div>
 
-        <div style={{ marginTop: '22px', textAlign: 'center', fontSize: '11px', color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}>
-          NASA Space Apps Challenge 2026 &bull; Autonomous Crew Telemetry
+        {/* Exact Original Credentials Hint Box */}
+        <div className="auth-credentials-hint" style={{ marginTop: '20px' }}>
+          <div><strong>Default Passcode:</strong> <span>AstroPass2026!</span> &bull; <span>MissionControl2026!</span></div>
+          <div style={{ marginTop: '4px', fontSize: '11px', color: 'var(--text-dim)' }}>
+            Enter any astronaut name and select your mission role to initialize your session.
+          </div>
         </div>
+
+        {/* Simulated Data Notice */}
+        <div style={{ marginTop: '16px', fontSize: '10px', color: 'var(--text-dim)', lineHeight: 1.4, borderTop: '1px solid var(--border-subtle)', paddingTop: '10px' }}>
+          <strong>Simulated Data Notice:</strong> Health telemetry values are simulated for demonstration. Indicators are informed by NASA human spaceflight research.
+        </div>
+
       </div>
     </div>
   );
